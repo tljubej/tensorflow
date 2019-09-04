@@ -112,8 +112,7 @@ $(wildcard tensorflow/lite/experimental/ruy/pmu.cc) \
 $(wildcard tensorflow/lite/experimental/ruy/thread_pool.cc) \
 $(wildcard tensorflow/lite/experimental/ruy/trace.cc) \
 $(wildcard tensorflow/lite/experimental/ruy/trmul.cc) \
-$(wildcard tensorflow/lite/experimental/ruy/tune.cc) \
-$(wildcard tensorflow/lite/tools/make/downloads/flatbuffers/src/util.cpp)
+$(wildcard tensorflow/lite/experimental/ruy/tune.cc)
 ifneq ($(BUILD_TYPE),micro)
 CORE_CC_ALL_SRCS += \
 $(wildcard tensorflow/lite/kernels/*.cc) \
@@ -126,7 +125,8 @@ $(wildcard tensorflow/lite/kernels/internal/*.c) \
 $(wildcard tensorflow/lite/kernels/internal/optimized/*.c) \
 $(wildcard tensorflow/lite/kernels/internal/reference/*.c) \
 $(wildcard tensorflow/lite/tools/make/downloads/farmhash/src/farmhash.cc) \
-$(wildcard tensorflow/lite/tools/make/downloads/fft2d/fftsg.c)
+$(wildcard tensorflow/lite/tools/make/downloads/fft2d/fftsg.c) \
+$(wildcard tensorflow/lite/tools/make/downloads/flatbuffers/src/util.cpp)
 endif
 # Remove any duplicates.
 CORE_CC_ALL_SRCS := $(sort $(CORE_CC_ALL_SRCS))
@@ -135,6 +135,7 @@ $(wildcard tensorflow/lite/*test.cc) \
 $(wildcard tensorflow/lite/*/*test.cc) \
 $(wildcard tensorflow/lite/*/*/*test.cc) \
 $(wildcard tensorflow/lite/*/*/*/*test.cc) \
+$(wildcard tensorflow/lite/kernels/*test_main.cc) \
 $(wildcard tensorflow/lite/kernels/*test_util.cc) \
 $(MINIMAL_SRCS)
 
@@ -231,9 +232,12 @@ AR := $(CC_PREFIX)${TARGET_TOOLCHAIN_PREFIX}ar
 MINIMAL_OBJS := $(addprefix $(OBJDIR), \
 $(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(MINIMAL_SRCS))))
 
-LIB_OBJS := $(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(TF_LITE_CC_SRCS)))))
+LIB_OBJS := $(addprefix $(OBJDIR), \
+$(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(TF_LITE_CC_SRCS)))))
 
-BENCHMARK_OBJS := $(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(BENCHMARK_SRCS)))))
+BENCHMARK_OBJS := $(addprefix $(OBJDIR), \
+$(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(BENCHMARK_SRCS)))))
+
 # For normal manually-created TensorFlow Lite C++ source files.
 $(OBJDIR)%.o: %.cc
 	@mkdir -p $(dir $@)
@@ -242,8 +246,9 @@ $(OBJDIR)%.o: %.cc
 $(OBJDIR)%.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-$(OBJDIR)%.o: %.cpp @mkdir -p $(dir $@) $(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+$(OBJDIR)%.o: %.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # The target that's compiled if there's no command-line arguments.
 all: $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
