@@ -152,8 +152,8 @@ def tf_workspace(path_prefix = "", tf_repo_name = ""):
         sha256 = "0dde8fb87f5dad2e409c9f4ea1bebc54e694cf4f3b633081b0d51a55c00f9c9f",
         strip_prefix = "eigen-eigen-a0d250e79c79",
         urls = [
-            "http://mirror.tensorflow.org/bitbucket.org/eigen/eigen/get/a0d250e79c79.tar.gz",
             "https://bitbucket.org/eigen/eigen/get/a0d250e79c79.tar.gz",
+            "http://mirror.tensorflow.org/bitbucket.org/eigen/eigen/get/a0d250e79c79.tar.gz",
         ],
     )
 
