@@ -113,11 +113,12 @@ $(wildcard tensorflow/lite/experimental/ruy/trace.cc) \
 $(wildcard tensorflow/lite/experimental/ruy/trmul.cc) \
 $(wildcard tensorflow/lite/experimental/ruy/tune.cc)
 ifeq ($(TARGET),resideo)
-$(wildcard tensorflow/lite/delegates/gpu/common/*.cc)
-$(wildcard tensorflow/lite/delegates/gpu/common/*/*.cc)
-$(wildcard tensorflow/lite/delegates/gpu/gl/*.cc)
-$(wildcard tensorflow/lite/delegates/gpu/gl/*/*.cc)
-$(wildcard tensorflow/lite/delegates/gpu/gl_delegate.cc)
+CORE_CC_ALL_SRCS += \
+$(wildcard tensorflow/lite/delegates/gpu/common/*.cc) \
+$(wildcard tensorflow/lite/delegates/gpu/common/*/*.cc) \
+$(wildcard tensorflow/lite/delegates/gpu/gl/*.cc) \
+$(wildcard tensorflow/lite/delegates/gpu/gl/*/*.cc) \
+$(wildcard tensorflow/lite/delegates/gpu/gl_delegate.cc) 
 endif
 ifneq ($(BUILD_TYPE),micro)
 CORE_CC_ALL_SRCS += \
