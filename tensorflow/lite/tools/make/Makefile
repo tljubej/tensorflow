@@ -57,6 +57,9 @@ LIBS := \
 # generate things like the protobuf compiler that require that), so all of
 # these settings are for the target compiler.
 CXXFLAGS := -O3 -DNDEBUG -fPIC
+ifeq ($(TARGET),resideo)
+CXXFLAGS += -DANDROID
+endif
 CXXFLAGS += $(EXTRA_CXXFLAGS)
 CFLAGS := ${CXXFLAGS}
 CXXFLAGS += --std=c++11
