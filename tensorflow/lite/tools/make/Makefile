@@ -119,6 +119,10 @@ $(wildcard tensorflow/lite/delegates/gpu/common/*.cc) \
 $(wildcard tensorflow/lite/delegates/gpu/common/*/*.cc) \
 $(wildcard tensorflow/lite/delegates/gpu/gl/*.cc) \
 $(wildcard tensorflow/lite/delegates/gpu/gl/*/*.cc) \
+$(filter-out tensorflow/lite/delegates/gpu/common/*test*.cc) \
+$(filter-out tensorflow/lite/delegates/gpu/common/*/*test*.cc) \
+$(filter-out tensorflow/lite/delegates/gpu/gl/*test*.cc) \
+$(filter-out tensorflow/lite/delegates/gpu/gl/*/*test*.cc) \
 $(wildcard tensorflow/lite/delegates/gpu/gl_delegate.cc) 
 endif
 ifneq ($(BUILD_TYPE),micro)
