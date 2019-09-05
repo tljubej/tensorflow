@@ -283,6 +283,11 @@ $(LIB_PATH): tensorflow/lite/schema/schema_generated.h $(LIB_OBJS)
 lib: $(LIB_PATH)
 
 $(MINIMAL_BINARY): $(MINIMAL_OBJS) $(LIB_PATH)
+	if [ $(TARGET) = "resideo" ]; then \
+		flatc -c -o tensorflow/lite/delegates/gpu/gl/ \
+			tensorflow/lite/delegates/gpu/gl/compiled_model.fbs\
+	fi
+
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) \
 	-o $(MINIMAL_BINARY) $(MINIMAL_OBJS) \
