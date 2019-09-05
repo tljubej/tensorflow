@@ -119,11 +119,7 @@ $(wildcard tensorflow/lite/delegates/gpu/common/*.cc) \
 $(wildcard tensorflow/lite/delegates/gpu/common/*/*.cc) \
 $(wildcard tensorflow/lite/delegates/gpu/gl/*.cc) \
 $(wildcard tensorflow/lite/delegates/gpu/gl/*/*.cc) \
-$(filter-out tensorflow/lite/delegates/gpu/common/*test*.cc) \
-$(filter-out tensorflow/lite/delegates/gpu/common/*/*test*.cc) \
-$(filter-out tensorflow/lite/delegates/gpu/gl/*test*.cc) \
-$(filter-out tensorflow/lite/delegates/gpu/gl/*/*test*.cc) \
-$(wildcard tensorflow/lite/delegates/gpu/gl_delegate.cc) 
+$(wildcard tensorflow/lite/delegates/gpu/gl_delegate.cc)
 endif
 ifneq ($(BUILD_TYPE),micro)
 CORE_CC_ALL_SRCS += \
@@ -149,6 +145,10 @@ $(wildcard tensorflow/lite/*/*/*test.cc) \
 $(wildcard tensorflow/lite/*/*/*/*test.cc) \
 $(wildcard tensorflow/lite/kernels/*test_main.cc) \
 $(wildcard tensorflow/lite/kernels/*test_util.cc) \
+$(wildcard tensorflow/lite/delegates/gpu/common/*test*.cc) \
+$(wildcard tensorflow/lite/delegates/gpu/common/*/*test*.cc) \
+$(wildcard tensorflow/lite/delegates/gpu/gl/*test*.cc) \
+$(wildcard tensorflow/lite/delegates/gpu/gl/*/*test*.cc) \
 $(MINIMAL_SRCS)
 
 BUILD_WITH_MMAP=true
