@@ -309,8 +309,9 @@ libdir:
 
 
 flatc_build:
-	cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release && make \
-	tensorflow/lite/tools/make/downloads/flatbuufers/
+	cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
+	tensorflow/lite/tools/make/downloads/flatbuffers/ \
+	&& make
 
 flatc_gen:
 	if [ "$(TARGET)" = "resideo" ]; then \
