@@ -309,7 +309,7 @@ libdir:
 
 flatc_gen:
 	if [ "$(TARGET)" = "resideo" ]; then \
-		flatc -c -o tensorflow/lite/delegates/gpu/gl/ \
+		flatc -c -o --gen-all --scoped-enums tensorflow/lite/delegates/gpu/gl/ \
 			tensorflow/lite/delegates/gpu/gl/compiled_model.fbs; \
 		echo "blabla"; \
 	fi
