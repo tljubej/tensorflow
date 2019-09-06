@@ -19,4 +19,8 @@ limitations under the License.
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
+#ifndef EGL_NO_CONFIG_KHR
+#define EGL_NO_CONFIG_KHR ((EGLConfig)0)
+#endif
+
 #endif  // TENSORFLOW_LITE_DELEGATES_GPU_GL_PORTABLE_EGL_H_
