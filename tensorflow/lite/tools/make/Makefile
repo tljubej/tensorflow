@@ -58,7 +58,7 @@ LIBS := \
 # these settings are for the target compiler.
 CXXFLAGS := -O3 -DNDEBUG -fPIC
 ifeq ($(TARGET),resideo)
-CXXFLAGS += -DANDROID -llibGLESv3 -llibEGL
+CXXFLAGS += -DANDROID -llibGLESv2_adreno -llibEGL
 endif
 CXXFLAGS += $(EXTRA_CXXFLAGS)
 CFLAGS := ${CXXFLAGS}
