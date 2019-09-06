@@ -266,7 +266,7 @@ $(OBJDIR)%.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # The target that's compiled if there's no command-line arguments.
-all: flatc_gen $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
+all: flatc_build flatc_gen $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
 
 # The target that's compiled for micro-controllers
 micro: $(LIB_PATH)
