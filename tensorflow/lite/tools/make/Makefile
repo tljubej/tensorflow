@@ -58,15 +58,12 @@ LIBS := \
 # these settings are for the target compiler.
 CXXFLAGS := -O3 -DNDEBUG -fPIC
 ifeq ($(TARGET),resideo)
-CXXFLAGS += -DANDROID -llibGLESv2_adreno -llibEGL
+CXXFLAGS += -DANDROID -L${AARCH64_SYSROOT}usr/lib -llibGLESv2_adreno -llibEGL
 endif
 CXXFLAGS += $(EXTRA_CXXFLAGS)
 CFLAGS := ${CXXFLAGS}
 CXXFLAGS += --std=c++11
 LDOPTS := -L/usr/local/lib
-ifeq ($(TARGET),resideo)
-LDOPTS += -L${AARCH64_SYSROOT}usr/lib
-endif
 ARFLAGS := -r
 TARGET_TOOLCHAIN_PREFIX :=
 CC_PREFIX :=
