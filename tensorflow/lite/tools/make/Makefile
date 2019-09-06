@@ -309,12 +309,18 @@ libdir:
 
 flatc_gen:
 	if [ "$(TARGET)" = "resideo" ]; then \
-		flatc -c --gen-all --scoped-enums\
+		flatc -c --scoped-enums\
+		-o tensorflow/lite/delegates/gpu/gl/ \
+		tensorflow/lite/delegates/gpu/gl/common.fbs; \
+		flatc -c --scoped-enums\
 		-o tensorflow/lite/delegates/gpu/gl/ \
 		tensorflow/lite/delegates/gpu/gl/compiled_model.fbs; \
-		flatc -c --gen-all --scoped-enums\
+		flatc -c --scoped-enums\
 		-o tensorflow/lite/delegates/gpu/gl/ \
 		tensorflow/lite/delegates/gpu/gl/metadata.fbs; \
+		flatc -c --scoped-enums\
+		-o tensorflow/lite/delegates/gpu/gl/ \
+		tensorflow/lite/delegates/gpu/gl/workgroups.fbs; \
 	fi
 
 # Gets rid of all generated files.
