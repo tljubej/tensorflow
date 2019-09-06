@@ -307,13 +307,16 @@ benchmark: $(BENCHMARK_BINARY)
 libdir:
 	@echo $(LIBDIR)
 
+
+flatc_build:
+	cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release && make
+
 flatc_gen:
 	if [ "$(TARGET)" = "resideo" ]; then \
-		flatc -c --gen-all --scoped-enums -o tensorflow/lite/delegates/gpu/gl/ \
+		tensorflow/lite/tools/make/downloads/flatbuufers/flatc \
+		-c --gen-all --scoped-enums -o tensorflow/lite/delegates/gpu/gl/ \
 			tensorflow/lite/delegates/gpu/gl/compiled_model.fbs; \
-		echo "blabla"; \
 	fi
-	echo "van ifa"
 
 # Gets rid of all generated files.
 clean:
