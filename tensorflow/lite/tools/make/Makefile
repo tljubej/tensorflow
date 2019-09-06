@@ -253,6 +253,12 @@ $(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(TF_LITE_CC_SRCS)))
 BENCHMARK_OBJS := $(addprefix $(OBJDIR), \
 $(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(BENCHMARK_SRCS)))))
 
+%.cc:
+	if [ $(TARGET) = "resideo" ]; then \
+		flatc -c -o tensorflow/lite/delegates/gpu/gl/ \
+			tensorflow/lite/delegates/gpu/gl/compiled_model.fbs\
+	fi
+
 # For normal manually-created TensorFlow Lite C++ source files.
 $(OBJDIR)%.o: %.cc
 	@mkdir -p $(dir $@)
@@ -283,11 +289,6 @@ $(LIB_PATH): tensorflow/lite/schema/schema_generated.h $(LIB_OBJS)
 lib: $(LIB_PATH)
 
 $(MINIMAL_BINARY): $(MINIMAL_OBJS) $(LIB_PATH)
-	if [ $(TARGET) = "resideo" ]; then \
-		flatc -c -o tensorflow/lite/delegates/gpu/gl/ \
-			tensorflow/lite/delegates/gpu/gl/compiled_model.fbs\
-	fi
-
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) \
 	-o $(MINIMAL_BINARY) $(MINIMAL_OBJS) \
