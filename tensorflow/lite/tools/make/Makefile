@@ -308,7 +308,7 @@ libdir:
 	@echo $(LIBDIR)
 
 flatc_gen:
-	if [ $(TARGET) = "resideo" ]; then \
+	if [ "$(TARGET)" = "resideo" ]; then \
 		flatc -c -o tensorflow/lite/delegates/gpu/gl/ \
 			tensorflow/lite/delegates/gpu/gl/compiled_model.fbs; \
 		echo "blabla"; \
