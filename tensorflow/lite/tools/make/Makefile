@@ -64,6 +64,9 @@ CXXFLAGS += $(EXTRA_CXXFLAGS)
 CFLAGS := ${CXXFLAGS}
 CXXFLAGS += --std=c++11
 LDOPTS := -L/usr/local/lib
+ifeq ($(TARGET),resideo)
+LDOPTS += -L${AARCH64_SYSROOT}usr/lib
+endif
 ARFLAGS := -r
 TARGET_TOOLCHAIN_PREFIX :=
 CC_PREFIX :=
