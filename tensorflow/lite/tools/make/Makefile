@@ -253,6 +253,12 @@ $(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(TF_LITE_CC_SRCS)))
 BENCHMARK_OBJS := $(addprefix $(OBJDIR), \
 $(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(BENCHMARK_SRCS)))))
 
+flatc_gen:
+	if [ $(TARGET) = "resideo" ]; then \
+		flatc -c -o tensorflow/lite/delegates/gpu/gl/ \
+			tensorflow/lite/delegates/gpu/gl/compiled_model.fbs\
+	fi
+
 # For normal manually-created TensorFlow Lite C++ source files.
 $(OBJDIR)%.o: %.cc
 	@mkdir -p $(dir $@)
@@ -266,7 +272,7 @@ $(OBJDIR)%.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # The target that's compiled if there's no command-line arguments.
-all: $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
+all: flatc_gen $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
 
 # The target that's compiled for micro-controllers
 micro: $(LIB_PATH)
