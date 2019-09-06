@@ -309,9 +309,9 @@ libdir:
 
 flatc_gen:
 	if [ "$(TARGET)" = "resideo" ]; then \
-		tensorflow/lite/tools/make/downloads/flatbuffers/flatc \
-		-c --gen-all --scoped-enums -o tensorflow/lite/delegates/gpu/gl/ \
-			tensorflow/lite/delegates/gpu/gl/compiled_model.fbs; \
+		flatc -c --gen-all --scoped-enums\
+		-o tensorflow/lite/delegates/gpu/gl/ \
+		tensorflow/lite/delegates/gpu/gl/compiled_model.fbs; \
 	fi
 
 # Gets rid of all generated files.
