@@ -266,7 +266,7 @@ $(OBJDIR)%.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # The target that's compiled if there's no command-line arguments.
-all: flatc_build flatc_gen $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
+all: flatc_gen $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
 
 # The target that's compiled for micro-controllers
 micro: $(LIB_PATH)
@@ -306,12 +306,6 @@ benchmark: $(BENCHMARK_BINARY)
 
 libdir:
 	@echo $(LIBDIR)
-
-
-flatc_build:
-	cd tensorflow/lite/tools/make/downloads/flatbuffers/ && \
-	CC=gcc CXX=g++ LD=ld AS=as cmake "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release . \
-	&& make && cd -
 
 flatc_gen:
 	if [ "$(TARGET)" = "resideo" ]; then \
