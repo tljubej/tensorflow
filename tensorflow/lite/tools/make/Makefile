@@ -309,7 +309,7 @@ libdir:
 
 
 flatc_build:
-	cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
+	CC=gcc CXX=g++ LD=ld AS=as cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release \
 	tensorflow/lite/tools/make/downloads/flatbuffers/ \
 	&& make
 
