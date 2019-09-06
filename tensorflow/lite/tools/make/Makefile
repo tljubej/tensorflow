@@ -256,7 +256,7 @@ $(patsubst %.cc,%.o,$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(BENCHMARK_SRCS))))
 flatc_gen:
 	if [ $(TARGET) = "resideo" ]; then \
 		flatc -c -o tensorflow/lite/delegates/gpu/gl/ \
-			tensorflow/lite/delegates/gpu/gl/compiled_model.fbs\
+			tensorflow/lite/delegates/gpu/gl/compiled_model.fbs;\
 	fi
 
 # For normal manually-created TensorFlow Lite C++ source files.
