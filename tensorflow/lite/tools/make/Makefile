@@ -312,6 +312,9 @@ flatc_gen:
 		flatc -c --gen-all --scoped-enums\
 		-o tensorflow/lite/delegates/gpu/gl/ \
 		tensorflow/lite/delegates/gpu/gl/compiled_model.fbs; \
+		flatc -c --gen-all --scoped-enums\
+		-o tensorflow/lite/delegates/gpu/gl/ \
+		tensorflow/lite/delegates/gpu/gl/metadata.fbs; \
 	fi
 
 # Gets rid of all generated files.
