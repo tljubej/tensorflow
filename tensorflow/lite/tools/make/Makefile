@@ -266,7 +266,7 @@ $(OBJDIR)%.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # The target that's compiled if there's no command-line arguments.
-all: absl_build flatc_gen $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
+all: flatc_gen $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
 
 # The target that's compiled for micro-controllers
 micro: $(LIB_PATH)
@@ -276,7 +276,7 @@ tensorflow/lite/schema/schema_generated.h:
 	@cp -u tensorflow/lite/schema/schema_generated.h.OPENSOURCE tensorflow/lite/schema/schema_generated.h
 
 # Gathers together all the objects we've compiled into a single '.a' archive.
-$(LIB_PATH): tensorflow/lite/schema/schema_generated.h $(LIB_OBJS)
+$(LIB_PATH): absl_build tensorflow/lite/schema/schema_generated.h $(LIB_OBJS)
 	@mkdir -p $(dir $@)
 	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS) $(wildcard $(MAKEFILE_DIR)/absl-install/lib/*.a)
 
