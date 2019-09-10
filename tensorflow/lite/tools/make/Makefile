@@ -154,8 +154,6 @@ $(wildcard tensorflow/lite/delegates/gpu/gl/*test*.cc) \
 $(wildcard tensorflow/lite/delegates/gpu/gl/*/*test*.cc) \
 $(MINIMAL_SRCS)
 
-ABSL_ALL_LIB := $(wildcard /absl-install/lib/*.a)
-
 BUILD_WITH_MMAP=true
 ifeq ($(BUILD_TYPE),micro)
 	BUILD_WITH_MMAP=false
@@ -268,7 +266,7 @@ $(OBJDIR)%.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # The target that's compiled if there's no command-line arguments.
-all: flatc_gen $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
+all: absl_build flatc_gen $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
 
 # The target that's compiled for micro-controllers
 micro: $(LIB_PATH)
@@ -280,7 +278,7 @@ tensorflow/lite/schema/schema_generated.h:
 # Gathers together all the objects we've compiled into a single '.a' archive.
 $(LIB_PATH): tensorflow/lite/schema/schema_generated.h $(LIB_OBJS)
 	@mkdir -p $(dir $@)
-	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS) $(ABSL_ALL_LIB)
+	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS) $(wildcard absl-install/lib/*.a)
 
 lib: $(LIB_PATH)
 
@@ -324,6 +322,13 @@ flatc_gen:
 		-o tensorflow/lite/delegates/gpu/gl/ \
 		tensorflow/lite/delegates/gpu/gl/workgroups.fbs; \
 	fi
+
+absl_build:
+	cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=arm\
+    -DCMAKE_C_COMPILER="arm-oe-linux-gnueabi-gcc" -DCMAKE_C_FLAGS="--sysroot=${AARCH64_SYSROOT} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -fPIC" \
+    -DCMAKE_CXX_COMPILER="arm-oe-linux-gnueabi-g++" -DCMAKE_CXX_FLAGS="--sysroot=${AARCH64_SYSROOT} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -fPIC"\
+    -DCMAKE_INSTALL_PREFIX=absl-install -DCMAKE_MAKE_PROGRAM=make $(MAKEFILE_DIR)/downloads/absl\
+      && cd $(MAKEFILE_DIR)/downloads/absl && make && make install
 
 # Gets rid of all generated files.
 clean:
