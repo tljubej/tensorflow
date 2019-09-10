@@ -58,7 +58,7 @@ LIBS := \
 # these settings are for the target compiler.
 CXXFLAGS := -O3 -DNDEBUG -fPIC
 ifeq ($(TARGET),resideo)
-CXXFLAGS += -DANDROID
+CXXFLAGS += -DANDROID -L${AARCH64_SYSROOT}usr/lib -llibGLESv2_adreno -llibEGL_adreno
 endif
 CXXFLAGS += $(EXTRA_CXXFLAGS)
 CFLAGS := ${CXXFLAGS}
@@ -153,6 +153,8 @@ $(wildcard tensorflow/lite/delegates/gpu/common/*/*test*.cc) \
 $(wildcard tensorflow/lite/delegates/gpu/gl/*test*.cc) \
 $(wildcard tensorflow/lite/delegates/gpu/gl/*/*test*.cc) \
 $(MINIMAL_SRCS)
+
+ABSL_ALL_LIB := $(wildcard /absl-install/lib/*.a)
 
 BUILD_WITH_MMAP=true
 ifeq ($(BUILD_TYPE),micro)
@@ -278,7 +280,7 @@ tensorflow/lite/schema/schema_generated.h:
 # Gathers together all the objects we've compiled into a single '.a' archive.
 $(LIB_PATH): tensorflow/lite/schema/schema_generated.h $(LIB_OBJS)
 	@mkdir -p $(dir $@)
-	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS)
+	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS) $(ABSL_ALL_LIB)
 
 lib: $(LIB_PATH)
 
