@@ -324,14 +324,14 @@ flatc_gen:
 	fi
 
 absl_build:
-	cd $(MAKEFILE_DIR)/downloads/absl &&\
-	cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=arm\
-    -DCMAKE_C_COMPILER="arm-oe-linux-gnueabi-gcc"\
+	cd $(MAKEFILE_DIR)/downloads/absl && \
+	cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=arm \
+    -DCMAKE_C_COMPILER="arm-oe-linux-gnueabi-gcc" \
 	-DCMAKE_C_FLAGS="--sysroot=${AARCH64_SYSROOT} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -fPIC" \
-    -DCMAKE_CXX_COMPILER="arm-oe-linux-gnueabi-g++"\
-	-DCMAKE_CXX_FLAGS="--sysroot=${AARCH64_SYSROOT} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -fPIC"\
-    -DCMAKE_INSTALL_PREFIX=$(MAKEFILE_DIR)/absl-install\
-	-DCMAKE_MAKE_PROGRAM="$(MAKE)" .\
+    -DCMAKE_CXX_COMPILER="arm-oe-linux-gnueabi-g++" \
+	-DCMAKE_CXX_FLAGS="--sysroot=${AARCH64_SYSROOT} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -fPIC" \
+    -DCMAKE_INSTALL_PREFIX=$(MAKEFILE_DIR)/absl-install \
+	-DCMAKE_MAKE_PROGRAM="$(MAKE)" . \
      && $(MAKE) && $(MAKE) install
 
 # Gets rid of all generated files.
