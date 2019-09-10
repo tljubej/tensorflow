@@ -278,7 +278,7 @@ tensorflow/lite/schema/schema_generated.h:
 # Gathers together all the objects we've compiled into a single '.a' archive.
 $(LIB_PATH): absl_build tensorflow/lite/schema/schema_generated.h $(LIB_OBJS)
 	@mkdir -p $(dir $@)
-	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS) $(wildcard $(MAKEFILE_DIR)/absl-install/lib/*.a)
+	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS) `find "$(MAKEFILE_DIR)/absl-install/lib" -name "*.a"`
 
 lib: $(LIB_PATH)
 
