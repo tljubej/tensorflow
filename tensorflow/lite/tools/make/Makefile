@@ -278,7 +278,7 @@ tensorflow/lite/schema/schema_generated.h:
 # Gathers together all the objects we've compiled into a single '.a' archive.
 $(LIB_PATH): tensorflow/lite/schema/schema_generated.h $(LIB_OBJS)
 	@mkdir -p $(dir $@)
-	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS) $(wildcard absl-install/lib/*.a)
+	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS) $(wildcard $(MAKEFILE_DIR)/absl-install/lib/*.a)
 
 lib: $(LIB_PATH)
 
@@ -327,8 +327,8 @@ absl_build:
 	cmake -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=arm\
     -DCMAKE_C_COMPILER="arm-oe-linux-gnueabi-gcc" -DCMAKE_C_FLAGS="--sysroot=${AARCH64_SYSROOT} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -fPIC" \
     -DCMAKE_CXX_COMPILER="arm-oe-linux-gnueabi-g++" -DCMAKE_CXX_FLAGS="--sysroot=${AARCH64_SYSROOT} -march=armv7-a -mfloat-abi=softfp -mfpu=neon -fPIC"\
-    -DCMAKE_INSTALL_PREFIX=absl-install -DCMAKE_MAKE_PROGRAM=make $(MAKEFILE_DIR)/downloads/absl\
-      && cd $(MAKEFILE_DIR)/downloads/absl && make && make install
+    -DCMAKE_INSTALL_PREFIX=$(MAKEFILE_DIR)/absl-install -DCMAKE_MAKE_PROGRAM="$(MAKE)" $(MAKEFILE_DIR)/downloads/absl\
+      && cd $(MAKEFILE_DIR)/downloads/absl && $(MAKE) && $(MAKE) install
 
 # Gets rid of all generated files.
 clean:
