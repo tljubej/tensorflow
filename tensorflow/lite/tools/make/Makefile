@@ -58,7 +58,7 @@ LIBS := \
 # these settings are for the target compiler.
 CXXFLAGS := -O3 -DNDEBUG -fPIC
 ifeq ($(TARGET),resideo)
-CXXFLAGS += -DANDROID -mfloat-abi=softfp -mfpu=neon -march=armv7-a
+CXXFLAGS += -DANDROID
 endif
 CXXFLAGS += $(EXTRA_CXXFLAGS)
 CFLAGS := ${CXXFLAGS}
@@ -278,7 +278,7 @@ tensorflow/lite/schema/schema_generated.h:
 # Gathers together all the objects we've compiled into a single '.a' archive.
 $(LIB_PATH): absl_build tensorflow/lite/schema/schema_generated.h $(LIB_OBJS)
 	@mkdir -p $(dir $@)
-	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS) $(shell find "$(MAKEFILE_DIR)/absl-install/lib" -name "*.a")
+	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS) $(shell find $(MAKEFILE_DIR)/downloads/absl/ -name "*.o")
 
 lib: $(LIB_PATH)
 
