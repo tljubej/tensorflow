@@ -154,8 +154,6 @@ $(wildcard tensorflow/lite/delegates/gpu/gl/*test*.cc) \
 $(wildcard tensorflow/lite/delegates/gpu/gl/*/*test*.cc) \
 $(MINIMAL_SRCS)
 
-ABSL_LIBS ?=  $(wildcard $(MAKEFILE_DIR)/absl-install/lib/*.a)
-
 BUILD_WITH_MMAP=true
 ifeq ($(BUILD_TYPE),micro)
 	BUILD_WITH_MMAP=false
@@ -280,7 +278,7 @@ tensorflow/lite/schema/schema_generated.h:
 # Gathers together all the objects we've compiled into a single '.a' archive.
 $(LIB_PATH): absl_build tensorflow/lite/schema/schema_generated.h $(LIB_OBJS)
 	@mkdir -p $(dir $@)
-	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS) $(ABSL_LIBS)
+	$(AR) $(ARFLAGS) $(LIB_PATH) $(LIB_OBJS) $(shell find "$(MAKEFILE_DIR)/absl-install/lib" -name "*.a")
 
 lib: $(LIB_PATH)
 
