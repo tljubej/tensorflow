@@ -196,18 +196,14 @@ InterpreterBuilder::InterpreterBuilder(const ::tflite::Model* model,
                                        ErrorReporter* error_reporter)
     : model_(model),
       op_resolver_(op_resolver),
-      error_reporter_(ValidateErrorReporter(error_reporter)) {
-        std::cout << "construct interpreterbuilder" << std::endl;
-
-      }
+      error_reporter_(ValidateErrorReporter(error_reporter)) {}
 
 InterpreterBuilder::~InterpreterBuilder() {}
 
 TfLiteStatus InterpreterBuilder::BuildLocalIndexToRegistrationMapping() {
   TfLiteStatus status = kTfLiteOk;
-  std::cout << "start registration" << std::endl;
   auto opcodes = model_->operator_codes();
-  std::cout << "after opcodes" << std::endl;
+  std::cout << "start registration" << std::endl;
 
   if (!opcodes) {
     return status;
