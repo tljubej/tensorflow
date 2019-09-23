@@ -18,6 +18,7 @@ limitations under the License.
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <iostream>
 
 #include "tensorflow/lite/allocation.h"
 #include "tensorflow/lite/c/builtin_op_data.h"
@@ -202,13 +203,17 @@ InterpreterBuilder::~InterpreterBuilder() {}
 TfLiteStatus InterpreterBuilder::BuildLocalIndexToRegistrationMapping() {
   TfLiteStatus status = kTfLiteOk;
   auto opcodes = model_->operator_codes();
+  std::cout << "start registration" << std::endl;
+
   if (!opcodes) {
     return status;
   }
   for (const OperatorCode* opcode : *opcodes) {
     const TfLiteRegistration* registration = nullptr;
+    std::cout << "before getopcode" << std::endl;
     status = GetRegistrationFromOpCode(opcode, op_resolver_, error_reporter_,
                                        &registration);
+    std::cout << "after getopcode" << std::endl;
     if (status != kTfLiteOk) {
       return status;
     }
@@ -475,6 +480,8 @@ TfLiteStatus InterpreterBuilder::operator()(
     return kTfLiteError;
   }
 
+  std::cout << "start interpreterbuilder" << std::endl;
+
   // Safe exit by deleting partially created interpreter, to reduce verbosity
   // on error conditions. Use by return cleanup_on_error();
   auto cleanup_and_error = [&interpreter]() {
@@ -487,6 +494,8 @@ TfLiteStatus InterpreterBuilder::operator()(
     return cleanup_and_error();
   }
 
+  std::cout << "checkmodel" << std::endl;
+
   if (model_->version() != TFLITE_SCHEMA_VERSION) {
     error_reporter_->Report(
         "Model provided is schema version %d not equal "
@@ -495,10 +504,13 @@ TfLiteStatus InterpreterBuilder::operator()(
     return cleanup_and_error();
   }
 
+  std::cout << "checkversion" << std::endl;
+
   if (BuildLocalIndexToRegistrationMapping() != kTfLiteOk) {
     error_reporter_->Report("Registration failed.\n");
     return cleanup_and_error();
   }
+  std::cout << "after registration" << std::endl;
 
   // Flatbuffer model schemas define a list of opcodes independent of the graph.
   // We first map those to registrations. This reduces string lookups for custom
@@ -507,6 +519,9 @@ TfLiteStatus InterpreterBuilder::operator()(
   // Construct interpreter with correct number of tensors and operators.
   auto* subgraphs = model_->subgraphs();
   auto* buffers = model_->buffers();
+
+  std::cout << "after get model stuff" << std::endl;
+
 
   if (subgraphs->size() == 0) {
     error_reporter_->Report("No subgraph in the model.\n");
@@ -519,13 +534,20 @@ TfLiteStatus InterpreterBuilder::operator()(
     (*interpreter)->AddSubgraphs(subgraphs->Length() - 1);
   }
 
+  std::cout << "after reset and set num threads" << std::endl;
+
+
   for (int subgraph_index = 0; subgraph_index < subgraphs->Length();
        ++subgraph_index) {
     const tflite::SubGraph* subgraph = (*subgraphs)[subgraph_index];
     tflite::Subgraph* modified_subgraph =
         (*interpreter)->subgraph(subgraph_index);
+    std::cout << "subgraph stuff" << std::endl;
+    
     auto operators = subgraph->operators();
     auto tensors = subgraph->tensors();
+    std::cout << "subgraph operators tensors stuff" << std::endl;
+
     if (!operators || !tensors || !buffers) {
       error_reporter_->Report(
           "Did not get operators, tensors, or buffers in subgraph %d.\n",
@@ -535,6 +557,8 @@ TfLiteStatus InterpreterBuilder::operator()(
     if (modified_subgraph->AddTensors(tensors->Length()) != kTfLiteOk) {
       return cleanup_and_error();
     }
+    std::cout << "subgraph add tensors stuff" << std::endl;
+
     // Set num threads
     // Parse inputs/outputs
     modified_subgraph->SetInputs(
@@ -542,11 +566,18 @@ TfLiteStatus InterpreterBuilder::operator()(
     modified_subgraph->SetOutputs(
         FlatBufferIntArrayToVector(subgraph->outputs()));
 
+    std::cout << "subgraph set inputs outputs stuff" << std::endl;
+
     // Finally setup nodes and tensors
     if (ParseNodes(operators, modified_subgraph) != kTfLiteOk)
       return cleanup_and_error();
+
+    std::cout << "subgraph parse nodes" << std::endl;
+    
     if (ParseTensors(buffers, tensors, modified_subgraph) != kTfLiteOk)
       return cleanup_and_error();
+
+    std::cout << "subgraph parse tensors" << std::endl;
 
     std::vector<int> variables;
     for (int i = 0; i < modified_subgraph->tensors_size(); ++i) {
@@ -556,10 +587,15 @@ TfLiteStatus InterpreterBuilder::operator()(
       }
     }
     modified_subgraph->SetVariables(std::move(variables));
+    std::cout << "subgraph set variables" << std::endl;
+
   }
 
   if (ApplyDelegates(interpreter->get()) != kTfLiteOk)
     return cleanup_and_error();
+
+  std::cout << "subgraph apply delegates" << std::endl;
+
 
   return kTfLiteOk;
 }
