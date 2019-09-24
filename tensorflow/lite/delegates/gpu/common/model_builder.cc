@@ -1377,7 +1377,7 @@ class NegOperationParser : public TFLiteOperationParser {
     RETURN_IF_ERROR(CheckMaxSupportedOpVersion(registration, 1));
     return OkStatus();
   }
-  explicit NegOperationParser(int clip) : clip_(clip) {}
+  explicit NegOperationParser() {}
   Status Parse(const TfLiteNode* tflite_node,
                const TfLiteRegistration* registration, GraphFloat32* graph,
                ObjectReader* reader) final {
@@ -1387,9 +1387,6 @@ class NegOperationParser : public TFLiteOperationParser {
 
     return reader->AddOutputs(node);
   }
-
- private:
-  int clip_;
 };
 
 class ReLuOperationParser : public TFLiteOperationParser {
@@ -1904,7 +1901,7 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
     case kTfLiteBuiltinPow:
       return make_unique<ElementwiseOperationParser>(OperationType::POW);
     case kTfLiteBuiltinNeg:
-      return make_unique<NegOperationParser>(OperationType::NEG);
+      return make_unique<NegOperationParser>();
     case kTfLiteBuiltinRelu:
       return make_unique<ReLuOperationParser>(0);
     case kTfLiteBuiltinRelu6:

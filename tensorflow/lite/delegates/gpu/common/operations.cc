@@ -82,6 +82,8 @@ std::string ToString(enum OperationType op) {
       return "pad";
     case OperationType::POW:
       return "pow";
+    case OperationType::NEG:
+      return "neg";
     case OperationType::PRELU:
       return "prelu";
     case OperationType::RELU:
@@ -147,6 +149,7 @@ OperationType OperationTypeFromString(const std::string& name) {
           {"multiply_scalar", OperationType::MULTIPLY_SCALAR},
           {"pad", OperationType::PAD},
           {"pooling_2d", OperationType::POOLING_2D},
+          {"neg", OperationType::NEG},
           {"prelu", OperationType::PRELU},
           {"relu", OperationType::RELU},
           {"resize", OperationType::RESIZE},
