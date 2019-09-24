@@ -160,6 +160,8 @@ OperationType OperationTypeFromString(const std::string& name) {
           {"square", OperationType::SQUARE},
           {"subtract", OperationType::SUB},
           {"tanh", OperationType::TANH},
+          {"neg", OperationType::NEG},
+          {"exp", OperationType::EXP},
           {"upsample_2d", OperationType::UPSAMPLE_2D},
       });
   auto op = operations->find(name);

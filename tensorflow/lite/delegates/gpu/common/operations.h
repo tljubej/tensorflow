@@ -70,6 +70,8 @@ enum class OperationType {
   SUB,
   TANH,
   UPSAMPLE_2D,
+  NEG,
+  EXP
 };
 
 std::string ToString(enum OperationType op);

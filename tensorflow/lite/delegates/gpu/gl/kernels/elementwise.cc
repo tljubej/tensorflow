@@ -88,6 +88,14 @@ class ElementwiseOneArgument : public NodeShader {
         source = "value_0 = tanh(value_0);";
         break;
       }
+      case OperationType::NEG: {
+        source = "value_0 = -value_0;";
+        break;
+      }
+      case OperationType::EXP: {
+        source = "value_0 = exp(value_0);";
+        break;
+      }
       default:
         return InvalidArgumentError("Incorrect elementwise operation type.");
     }
@@ -191,6 +199,8 @@ std::unique_ptr<NodeShader> NewElementwiseNodeShader(
     case OperationType::SQUARE:
     case OperationType::SIGMOID:
     case OperationType::TANH:
+    case OperationType::NEG:
+    case OperationType::EXP:
       return absl::make_unique<ElementwiseOneArgument>(operation_type);
     case OperationType::SUB:
     case OperationType::DIV:

@@ -1307,6 +1307,8 @@ class ElementwiseOperationParser : public TFLiteOperationParser {
       case OperationType::SQUARE:
       case OperationType::SIGMOID:
       case OperationType::TANH:
+      case OperationType::NEG:
+      case OperationType::EXP:
         return true;
       default:
         return false;
@@ -1911,6 +1913,10 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
       return make_unique<ElementwiseOperationParser>(OperationType::SUB);
     case kTfLiteBuiltinTanh:
       return make_unique<ElementwiseOperationParser>(OperationType::TANH);
+    case kTfLiteBuiltinNeg:
+      return make_unique<ElementwiseOperationParser>(OperationType::NEG);
+    case kTfLiteBuiltinExp:
+      return make_unique<ElementwiseOperationParser>(OperationType::EXP);
     case kTfLiteBuiltinTransposeConv:
       return make_unique<TransposeConvOperationParser>();
 
