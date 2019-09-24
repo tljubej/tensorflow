@@ -420,22 +420,6 @@ Status MaybeFuseActivation(TfLiteFusedActivation fused_activation,
         activation_node->operation.type = ToString(OperationType::TANH);
       }
       break;
-    case kTfLiteBuiltinNeg:
-      for (auto index : output_indices) {
-        Node* activation_node;
-        RETURN_IF_ERROR(
-            NewPassthroughNode(graph, node, outputs[index], &activation_node));
-        activation_node->operation.type = ToString(OperationType::NEG);
-      }
-      break;
-    case kTfLiteBuiltinExp:
-      for (auto index : output_indices) {
-        Node* activation_node;
-        RETURN_IF_ERROR(
-            NewPassthroughNode(graph, node, outputs[index], &activation_node));
-        activation_node->operation.type = ToString(OperationType::EXP);
-      }
-      break;
     default:
       return NotFoundError(
           StrCat("Unsupported fused activation: ", fused_activation));
