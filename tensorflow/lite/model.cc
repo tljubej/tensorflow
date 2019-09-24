@@ -78,7 +78,7 @@ std::unique_ptr<FlatBufferModel> FlatBufferModel::BuildFromFile(
   error_reporter = ValidateErrorReporter(error_reporter);
 
   std::unique_ptr<FlatBufferModel> model;
-  auto allocation = GetAllocationFromFile(filename, /*mmap_file=*/true,
+  auto allocation = GetAllocationFromFile(filename, /*mmap_file=*/false,
                                           error_reporter, /*use_nnapi=*/true);
   model.reset(new FlatBufferModel(std::move(allocation), error_reporter));
   if (!model->initialized()) model.reset();
