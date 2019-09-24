@@ -50,7 +50,6 @@ enum class OperationType {
   LSTM,
   MAX_UNPOOLING_2D,
   MUL,
-  NEG,
   MULTIPLY_SCALAR,
   POOLING_2D,
   POW,

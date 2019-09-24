@@ -35,7 +35,6 @@ limitations under the License.
 #include "tensorflow/lite/delegates/gpu/gl/kernels/fully_connected.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/lstm.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/mul.h"
-#include "tensorflow/lite/delegates/gpu/gl/kernels/neg.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/pad.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/pooling.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/prelu.h"
@@ -83,7 +82,6 @@ class Registry : public NodeShader {
     insert_op(Type::MULTIPLY_SCALAR, NewMultiplyScalarNodeShader);
     insert_op(Type::PAD, NewPadNodeShader);
     insert_op(Type::POOLING_2D, NewPoolingNodeShader);
-    insert_op(Type::NEG, NewNegNodeShader);
     insert_op(Type::RELU, NewReLUNodeShader);
     insert_op(Type::RESHAPE, NewReshapeNodeShader);
     insert_op(Type::PRELU, NewPReLUNodeShader);
