@@ -878,7 +878,7 @@ TfLiteStatus Subgraph::SetTensorParametersReadOnly(
     std::cout << "kTfLiteMmapRo readonly 2: " << std::endl;
     TfLiteTensorReset(type, name, ConvertArrayToTfLiteIntArray(rank, dims),
                       GetLegacyQuantization(quantization),
-                      const_cast<char*>(buffer), bytes, kTfLiteArenaRw,
+                      const_cast<char*>(buffer), bytes, kTfLiteMmapRo,
                       allocation, false, &tensor);
     // TODO(suharshs): Update TfLiteTensorReset to include the new quantization
     // if there are other required callers.

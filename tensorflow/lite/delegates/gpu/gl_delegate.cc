@@ -173,9 +173,9 @@ class Delegate {
       for (int i = 0; i < delegate_params->input_tensors->size; ++i) {
         const int tensor_index = delegate_params->input_tensors->data[i];
         auto* tensor = context->tensors + tensor_index;
-        if (tensor->allocation_type == TfLiteAllocationType::kTfLiteMmapRo) {
-          continue;
-        }
+        // if (tensor->allocation_type == TfLiteAllocationType::kTfLiteMmapRo) {
+        //   continue;
+        // }
         tflite_graph_io.insert(tensor_index);
         const auto* input = find_value(tensor_index);
         if (!input || tensor->type != TfLiteType::kTfLiteFloat32) {
@@ -194,7 +194,7 @@ class Delegate {
         // externally provided buffer.
         auto external_buffer = bhwc_objects_.FindBuffer(tensor_index);
         GlBuffer buffer;
-        if (IsPHWC4(input->tensor.shape) && external_buffer) {
+        if (IsPHWC4(input->tensor.shape) && external_buffer && tensor->allocation_type != TfLiteAllocationType::kTfLiteMmapRo) {
           buffer = external_buffer->MakeRef();
         } else {
           RETURN_IF_ERROR(CreateReadWriteShaderStorageBuffer<float>(
