@@ -240,6 +240,7 @@ class ObjectReader {
     if (idx >= tflite_node_->inputs->size) {
       return OutOfRangeError(StrCat("ReadValue: input tensor index: ", idx));
     }
+    std::cout << ">>>ReadValue" << std::endl;
     RETURN_IF_ERROR(
         ReadValueByTensorIdx(tflite_node_->inputs->data[idx], value));
     return OkStatus();
@@ -297,6 +298,7 @@ class ObjectReader {
 
   Status AddInput(const Node* node, uint32_t idx) {
     Value<TensorRefFloat32>* input;
+    std::cout << ">>>AddInput" << std::endl;
     RETURN_IF_ERROR(ReadValue(idx, &input));
     return graph_->AddConsumer(node->id, input->id);
   }
@@ -1258,6 +1260,7 @@ class ElementwiseOperationParser : public TFLiteOperationParser {
     node->operation.type = ToString(operation_type_);
 
     if (IsOneArgumentOperation()) {
+      std::cout << ">>>ElementwiseOperationParser " << ToString(operation_type_) << std::endl;
       RETURN_IF_ERROR(reader->AddInput(node, 0));
     } else if (IsTwoArgumentOperation()) {
       if (tflite_node->inputs->size != 2) {
