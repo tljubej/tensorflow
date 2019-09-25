@@ -1429,6 +1429,7 @@ class MulOperationParser : public TFLiteOperationParser {
       RETURN_IF_ERROR(reader->AddInput(node, 1));
     } else {
       node->operation.type = ToString(OperationType::MULTIPLY_SCALAR);
+      std::cout << ">>>MulOperationParser" << std::endl;
       RETURN_IF_ERROR(reader->AddInput(node, 0));
       MultiplyScalarAttributes attr;
       TfLiteIntArray dims;
