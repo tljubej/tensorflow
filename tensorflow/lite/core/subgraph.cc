@@ -875,7 +875,7 @@ TfLiteStatus Subgraph::SetTensorParametersReadOnly(
     tensor.allocation = allocation;
   } else {
     state_ = kStateUninvokable;
-    std::cout << "kTfLiteMmapRo readonly 2: " << tensor.name << " " << tensor.type << std::endl;
+    std::cout << "kTfLiteMmapRo readonly 2: " << std::endl;
     TfLiteTensorReset(type, name, ConvertArrayToTfLiteIntArray(rank, dims),
                       GetLegacyQuantization(quantization),
                       const_cast<char*>(buffer), bytes, kTfLiteMmapRo,
