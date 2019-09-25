@@ -298,7 +298,7 @@ class ObjectReader {
 
   Status AddInput(const Node* node, uint32_t idx) {
     Value<TensorRefFloat32>* input;
-    std::cout << ">>>AddInput" << std::endl;
+    std::cout << ">>>AddInput id:" << node->id << " op:" << node->operation.type << std::endl;
     RETURN_IF_ERROR(ReadValue(idx, &input));
     return graph_->AddConsumer(node->id, input->id);
   }
