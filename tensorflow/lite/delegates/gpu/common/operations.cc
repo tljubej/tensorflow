@@ -122,6 +122,10 @@ std::string ToString(enum OperationType op) {
       return "tanh";
     case OperationType::LSTM:
       return "lstm";
+    case OperationType::NEG:
+      return "neg";
+    case OperationType::EXP:
+      return "exp";
   }
   return "unknown_operation";
 }

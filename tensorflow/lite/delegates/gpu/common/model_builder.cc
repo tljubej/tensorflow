@@ -313,6 +313,7 @@ class ObjectReader {
     if ((*tensor_to_value_)[tensor_idx] == nullptr) {
       const TfLiteTensor& tflite_tensor = context_->tensors[tensor_idx];
       if (tflite::IsConstantTensor(&tflite_tensor)) {
+        std::cout << "Failed at: " << tflite_tensor.name << " " << tflite_tensor.type << std::endl;
         return NotFoundError(
             StrCat("ReadValue: value is a constant tensor: ", tensor_idx));
       }
