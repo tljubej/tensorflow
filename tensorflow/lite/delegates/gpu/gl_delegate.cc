@@ -194,7 +194,7 @@ class Delegate {
         // externally provided buffer.
         auto external_buffer = bhwc_objects_.FindBuffer(tensor_index);
         GlBuffer buffer;
-        if (IsPHWC4(input->tensor.shape) && external_buffer && tensor->allocation_type != TfLiteAllocationType::kTfLiteMmapRo) {
+        if (IsPHWC4(input->tensor.shape) && external_buffer) {
           buffer = external_buffer->MakeRef();
         } else {
           RETURN_IF_ERROR(CreateReadWriteShaderStorageBuffer<float>(
