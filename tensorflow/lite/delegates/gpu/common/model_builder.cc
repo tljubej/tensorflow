@@ -303,6 +303,7 @@ class ObjectReader {
 
   Status ReadValueByTensorIdx(uint32_t tensor_idx,
                               Value<TensorRefFloat32>** value) {
+    std::cout << ">>>ReadValueByTensorIdx" << std::endl;
     if (tensor_idx >= tensor_to_value_->size()) {
       return OutOfRangeError(
           StrCat("ReadValue: input tensor index: ", tensor_idx));
