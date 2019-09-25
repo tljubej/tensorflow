@@ -407,7 +407,7 @@ TfLiteStatus InterpreterBuilder::ParseTensors(
     }
 
     bool is_variable = tensor->is_variable();
-    if (buffer_ptr) {
+    if (false) {
       if (is_variable) {
         error_reporter_->Report(
             "Tensor %d is a variable tensor with buffer. "
