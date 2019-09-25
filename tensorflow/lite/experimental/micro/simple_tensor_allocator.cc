@@ -17,6 +17,8 @@ limitations under the License.
 
 #include "tensorflow/lite/core/api/flatbuffer_conversions.h"
 
+#include <iostream>
+
 namespace tflite {
 namespace {
 
@@ -98,6 +100,7 @@ TfLiteStatus SimpleTensorAllocator::AllocateTensor(
     }
   }
   if (result->data.raw) {
+    std::cout << "kTfLiteMmapRo: " << result->name << " " << result->type << std::endl;
     result->allocation_type = kTfLiteMmapRo;
   } else {
     int data_size = 1;
