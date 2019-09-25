@@ -30,6 +30,7 @@ limitations under the License.
 #include <memory>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "absl/container/flat_hash_map.h"
 #include "third_party/eigen3/Eigen/Core"
@@ -1043,6 +1044,7 @@ class DecodeProtoOp : public OpKernel {
         continue;
       }
 
+      std::cout << ">>>Collect" << std::endl;
       Status st = CollectField(*field, WireFormatLite::GetTagWireType(tag),
                                input, &(*collectors)[last_good_field_index]);
       if (!st.ok()) {
@@ -1091,6 +1093,7 @@ class DecodeProtoOp : public OpKernel {
       }
       return Status::OK();
     }
+    std::cout << ">>>CollectField" << std::endl;
     return collector->ReadValue(input, field);
   }
 

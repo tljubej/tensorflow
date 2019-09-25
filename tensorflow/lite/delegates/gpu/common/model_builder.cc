@@ -22,6 +22,7 @@ limitations under the License.
 #include <memory>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "absl/memory/memory.h"
 #include "absl/strings/str_cat.h"
@@ -642,6 +643,7 @@ class ConcatenationOperationParser : public TFLiteOperationParser {
     std::vector<const Value<TensorRefFloat32>*> inputs;
     for (uint32_t idx = 0; idx < tflite_node->inputs->size; ++idx) {
       Value<TensorRefFloat32>* value;
+      std::cout << ">>>ConcatenationOperationParser::Parse" << std::endl;
       const auto status = reader->ReadValue(idx, &value);
       if (status.ok()) {
         inputs.push_back(value);
@@ -1107,10 +1109,12 @@ class LstmOperationParser : public TFLiteOperationParser {
 
     Value<TensorRefFloat32>* concat_temp;
     int concat_tensor_idx = tflite_node->outputs->data[2];
+    std::cout << ">>>LstmOperationParser::Parse 1" << std::endl;
     RETURN_IF_ERROR(
         reader->ReadValueByTensorIdx(concat_tensor_idx, &concat_temp));
     Value<TensorRefFloat32>* activ_temp;
     int activ_tensor_idx = tflite_node->outputs->data[3];
+    std::cout << ">>>LstmOperationParser::Parse 2" << std::endl;
     RETURN_IF_ERROR(
         reader->ReadValueByTensorIdx(activ_tensor_idx, &activ_temp));
 
@@ -1523,6 +1527,7 @@ class StridedSliceOperationParser : public TFLiteOperationParser {
     node->operation.type = ToString(OperationType::SLICE);
     RETURN_IF_ERROR(reader->AddOutputs(node));
     Value<TensorRefFloat32>* input;
+    std::cout << ">>>StridedSliceOperationParser::Parse" << std::endl;
     RETURN_IF_ERROR(reader->ReadValue(0, &input));
     RETURN_IF_ERROR(graph->AddConsumer(node->id, input->id));
 
@@ -1686,6 +1691,7 @@ class TransposeConvOperationParser : public TFLiteOperationParser {
     auto* node = graph->NewNode();
     node->operation.type = ToString(OperationType::CONVOLUTION_TRANSPOSED);
     Value<TensorRefFloat32>* input;
+    std::cout << ">>>TransposeConvOperationParser" << std::endl;
     RETURN_IF_ERROR(reader->ReadValue(2, &input));
     RETURN_IF_ERROR(graph->AddConsumer(node->id, input->id));
     RETURN_IF_ERROR(reader->AddOutputs(node));
