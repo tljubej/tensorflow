@@ -22,6 +22,7 @@ limitations under the License.
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <iostream>
 
 #include "absl/memory/memory.h"
 #include "absl/strings/str_cat.h"
@@ -230,6 +231,7 @@ class CompiledModelImpl
     auto it = shader_to_index_.find(shader_src);
     if (it == shader_to_index_.end()) {
       GlShader shader;
+      std::cout << ">>>Compiling shader " << shader_src << std::endl;
       RETURN_IF_ERROR(
           GlShader::CompileShader(GL_COMPUTE_SHADER, shader_src, &shader));
       shaders_.push_back(std::move(shader));
