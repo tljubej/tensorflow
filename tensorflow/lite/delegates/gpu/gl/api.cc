@@ -262,6 +262,7 @@ class CompiledModelImpl
     auto runtime = absl::make_unique<Runtime>(options, gpu_info_, command_queue,
                                               refs ? refs.get() : objects);
     for (auto& c : programs_) {
+      std::cout << ">>>NewRun program: " << std::endl;
       RETURN_IF_ERROR(runtime->AddProgram(shaders_[c.shader_idx], c.parameters,
                                           c.objects, c.num_workgroups));
     }

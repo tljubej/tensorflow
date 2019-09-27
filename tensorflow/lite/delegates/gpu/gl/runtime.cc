@@ -19,6 +19,7 @@ limitations under the License.
 #include <cstdint>
 #include <unordered_map>
 #include <vector>
+#include <iostream>
 
 #include "absl/strings/str_cat.h"
 #include "tensorflow/lite/delegates/gpu/common/data_type.h"
@@ -154,6 +155,7 @@ Status MakeBindingFunc(const Object& object, uint32_t id,
             absl::StrCat("Buffer ", id, " size in bytes ", ptr->bytes_size(),
                          " < requested size_in_bytes ", size_in_bytes));
       }
+      std::cout << ">>>Call BindToIndex" << std::endl;
       *binding_func = [=]() { return ptr->BindToIndex(binding); };
       break;
     }
@@ -209,6 +211,7 @@ Status Runtime::AddProgram(const GlShader& shader,
       // Reference object could be provided externally as a model input/output
       // but also for debugging purposes. Otherwise all references are collected
       // and allocated later.
+      std::cout << ">>>AddProgram" << std::endl;
       Status status = MakeBindingFunc(object, GetRef(object),
                                       *external_objects_, &binding_func);
       if (!status.ok()) {
@@ -312,6 +315,7 @@ Status Runtime::PrepareForExecution() {
       // Check whether it is created already.
       BindFunc binding;
       ObjectRef ref = GetRef(object);
+      std::cout << ">>>PrepareForExecution" << std::endl;
       Status status = MakeBindingFunc(object, ref, internal_objects_, &binding);
       if (!status.ok()) {
         if (status.code() != StatusCode::kNotFound) {

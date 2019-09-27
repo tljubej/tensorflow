@@ -295,8 +295,12 @@ std::string ToBufferType(DataType data_type) {
       return "uvec2";
     case DataType::FLOAT32:
       return "vec4";
+    case DataType::FLOAT64:
+    case DataType::INT64:
+    case DataType::UINT64:
+      return "dvec4";
     default:
-      return "vec4";
+      return "unknown";
   }
 }
 
