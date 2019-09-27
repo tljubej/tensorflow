@@ -231,7 +231,6 @@ class CompiledModelImpl
     auto it = shader_to_index_.find(shader_src);
     if (it == shader_to_index_.end()) {
       GlShader shader;
-      std::cout << ">>>Compiling shader " << shader_src << std::endl;
       RETURN_IF_ERROR(
           GlShader::CompileShader(GL_COMPUTE_SHADER, shader_src, &shader));
       shaders_.push_back(std::move(shader));

@@ -21,6 +21,7 @@ limitations under the License.
 #include <string>
 #include <unordered_set>
 #include <vector>
+#include <iostream>
 
 #include <EGL/egl.h>
 #include <GLES3/gl31.h>
@@ -289,6 +290,7 @@ class Delegate {
         // Use input from GPU.
         // Conversion is needed only when external object is not phwc4.
         if (!IsPHWC4(tensors_[id].shape)) {
+          std::cout << ">>>Converting to PHWC4" << context->tensors[tensors_[id].tensor_index].name << std::endl;
           RETURN_IF_ERROR(bhwc_to_phwc4_.Convert(
               ref.shape, *external_object, command_queue_.get(),
               phwc4_objects_.FindBuffer(id)));
@@ -313,6 +315,7 @@ class Delegate {
         // Convert data from PHWC4 to BHWC and leave it in GPU object.
         // Conversion is needed only when external object is not phwc4.
         if (!IsPHWC4(tensors_[id].shape)) {
+          std::cout << ">>>Converting to BHWC" << context->tensors[tensors_[id].tensor_index].name << std::endl;
           RETURN_IF_ERROR(
               phwc4_to_bhwc_.Convert(ref.shape, *phwc4_objects_.FindBuffer(id),
                                      command_queue_.get(), external_object));
