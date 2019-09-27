@@ -296,7 +296,7 @@ std::string ToBufferType(DataType data_type) {
     case DataType::FLOAT32:
       return "vec4";
     default:
-      return "unknown";
+      return "vec4";
   }
 }
 
