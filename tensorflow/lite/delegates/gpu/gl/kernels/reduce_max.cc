@@ -100,7 +100,7 @@ int SelectMultiplier(int32_t input_width,
   return 1;
 }
 
-std::unique_ptr<NodeShader> NewConvolutionNodeShader() {
+std::unique_ptr<NodeShader> NewReduceMaxShader() {
   return absl::make_unique<ReduceMax>();
 }
 
