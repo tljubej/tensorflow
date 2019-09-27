@@ -1959,6 +1959,8 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
       return make_unique<ElementwiseOperationParser>(OperationType::EXP);
     case kTfLiteBuiltinTransposeConv:
       return make_unique<TransposeConvOperationParser>();
+    case kTfLiteBuiltinReduceMax:
+      return make_unique<ReduceMaxOperationParser>(OperationType::REDUCE_MAX);
 
     case kTfLiteBuiltinCustom:
       if (custom_name == "Convolution2DTransposeBias") {
