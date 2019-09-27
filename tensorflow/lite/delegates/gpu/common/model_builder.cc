@@ -312,11 +312,11 @@ class ObjectReader {
     }
     if ((*tensor_to_value_)[tensor_idx] == nullptr) {
       const TfLiteTensor& tflite_tensor = context_->tensors[tensor_idx];
-      // if (tflite::IsConstantTensor(&tflite_tensor)) {
-      //   std::cout << "Failed at: " << tflite_tensor.name << " " << tflite_tensor.type << std::endl;
-      //   return NotFoundError(
-      //       StrCat("ReadValue: value is a constant tensor: ", tensor_idx));
-      // }
+      if (tflite::IsConstantTensor(&tflite_tensor)) {
+        std::cout << "Failed at: " << tflite_tensor.name << " " << tflite_tensor.type << std::endl;
+        return NotFoundError(
+            StrCat("ReadValue: value is a constant tensor: ", tensor_idx));
+      }
       Value<TensorRefFloat32>* value = graph_->NewValue();
       RETURN_IF_ERROR(
           ConvertTfLiteTensorToTensorRef(tflite_tensor, &value->tensor));
@@ -1458,17 +1458,17 @@ class MulOperationParser : public TFLiteOperationParser {
     } else {
       node->operation.type = ToString(OperationType::MULTIPLY_SCALAR);
       std::cout << ">>>MulOperationParser" << std::endl;
-      RETURN_IF_ERROR(reader->AddInput(node, 0));
+      RETURN_IF_ERROR(reader->AddInput(node, 1));
       MultiplyScalarAttributes attr;
       TfLiteIntArray dims;
-      RETURN_IF_ERROR(reader->GetTensorDims(1, &dims));
+      RETURN_IF_ERROR(reader->GetTensorDims(0, &dims));
       if (dims.size <= 0) {
         Tensor<Scalar, DataType::FLOAT32> tensor;
-        RETURN_IF_ERROR(reader->ReadTensor(1, &tensor));
+        RETURN_IF_ERROR(reader->ReadTensor(0, &tensor));
         attr.param = tensor.data[0];
       } else {
         Tensor<Linear, DataType::FLOAT32> tensor;
-        RETURN_IF_ERROR(reader->ReadTensor(1, &tensor));
+        RETURN_IF_ERROR(reader->ReadTensor(0, &tensor));
         attr.param = std::move(tensor);
       }
       node->operation.attributes = std::move(attr);
@@ -1959,8 +1959,8 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
       return make_unique<ElementwiseOperationParser>(OperationType::EXP);
     case kTfLiteBuiltinTransposeConv:
       return make_unique<TransposeConvOperationParser>();
-    case kTfLiteBuiltinReduceMax:
-      return make_unique<ReduceMaxOperationParser>();
+    // case kTfLiteBuiltinReduceMax:
+    //   return make_unique<ReduceMaxOperationParser>();
 
     case kTfLiteBuiltinCustom:
       if (custom_name == "Convolution2DTransposeBias") {
