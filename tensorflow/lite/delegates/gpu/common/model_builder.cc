@@ -557,6 +557,34 @@ Status CheckKernelsAndStrides(int kernel_h, int kernel_w, int strides_h,
   return OkStatus();
 }
 
+class ReduceMaxOperationParser : public TFLiteOperationParser {
+ public:
+  Status IsSupported(const TfLiteContext* context,
+                     const TfLiteNode* tflite_node,
+                     const TfLiteRegistration* registration) final {
+    RETURN_IF_ERROR(CheckMaxSupportedOpVersion(registration, 1));
+    RETURN_IF_ERROR(
+        CheckInputsOutputs(context, tflite_node, /*inputs=*/2, /*outputs=*/1));
+    RETURN_IF_ERROR(CheckTensorIsAvailable(context, tflite_node, 1));
+    return OkStatus();
+  }
+
+  Status Parse(const TfLiteNode* tflite_node,
+               const TfLiteRegistration* registration, GraphFloat32* graph,
+               ObjectReader* reader) final {
+    Node* node = graph->NewNode();
+    node->operation.type = ToString(OperationType::REDUCE_MAX);
+    RETURN_IF_ERROR(reader->AddInput(node, 0));
+    RETURN_IF_ERROR(reader->AddOutputs(node));
+
+    ReduceMaxAttributes attr;
+    RETURN_IF_ERROR(reader->ReadTensor(1, &attr.axis));
+
+    node->operation.attributes = std::move(attr);
+    return OkStatus();
+  }
+};
+
 class Conv2DOperationParser : public TFLiteOperationParser {
  public:
   Status IsSupported(const TfLiteContext* context,

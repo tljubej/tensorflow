@@ -126,6 +126,8 @@ std::string ToString(enum OperationType op) {
       return "neg";
     case OperationType::EXP:
       return "exp";
+    case OperationType::REDUCE_MAX:
+      return "reduce_max";
   }
   return "unknown_operation";
 }
@@ -167,6 +169,7 @@ OperationType OperationTypeFromString(const std::string& name) {
           {"neg", OperationType::NEG},
           {"exp", OperationType::EXP},
           {"upsample_2d", OperationType::UPSAMPLE_2D},
+          {"reduce_max", OperationType::REDUCE_MAX},
       });
   auto op = operations->find(name);
   return op == operations->end() ? OperationType::UNKNOWN : op->second;

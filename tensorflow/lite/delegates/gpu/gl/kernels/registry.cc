@@ -44,6 +44,7 @@ limitations under the License.
 #include "tensorflow/lite/delegates/gpu/gl/kernels/softmax.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/transpose_conv.h"
 #include "tensorflow/lite/delegates/gpu/gl/kernels/upsampling_bilinear.h"
+#include "tensorflow/lite/delegates/gpu/gl/kernels/reduce_max.h"
 
 #ifndef TFLITE_GPU_BINARY_RELEASE
 #include "tensorflow/lite/delegates/gpu/gl/kernels/max_unpooling.h"
@@ -88,6 +89,7 @@ class Registry : public NodeShader {
     insert_op(Type::SLICE, NewSliceNodeShader);
     insert_op(Type::SOFT_MAX, NewSoftMaxNodeShader);
     insert_op(Type::UPSAMPLE_2D, NewUpsamplingNodeShader);
+    insert_op(Type::REDUCE_MAX, NewReduceMaxShader);
 
     insert_elementwise_op(Type::ABS);
     insert_elementwise_op(Type::COS);
@@ -102,6 +104,8 @@ class Registry : public NodeShader {
     insert_elementwise_op(Type::DIV);
     insert_elementwise_op(Type::POW);
     insert_elementwise_op(Type::SQUARED_DIFF);
+    insert_elementwise_op(Type::NEG);
+    insert_elementwise_op(Type::EXP);
 
 #ifndef TFLITE_GPU_BINARY_RELEASE
     insert_op(Type::MAX_UNPOOLING_2D, NewMaxUnpoolingNodeShader);

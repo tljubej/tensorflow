@@ -53,6 +53,24 @@ cc_library(
 )
 
 cc_library(
+    name = "reduce_max",
+    srcs = ["reduce_max.cc"],
+    hdrs = ["reduce_max.h"],
+    deps = [
+        "//tensorflow/lite/delegates/gpu/common:convert",
+        "//tensorflow/lite/delegates/gpu/common:operations",
+        "//tensorflow/lite/delegates/gpu/common:shape",
+        "//tensorflow/lite/delegates/gpu/common:status",
+        "//tensorflow/lite/delegates/gpu/common:types",
+        "//tensorflow/lite/delegates/gpu/common:util",
+        "//tensorflow/lite/delegates/gpu/gl:node_shader",
+        "//tensorflow/lite/delegates/gpu/gl/workgroups:ideal_workgroup_picker",
+        "@com_google_absl//absl/memory",
+        "@com_google_absl//absl/strings",
+    ],
+)
+
+cc_library(
     name = "conv",
     srcs = ["conv.cc"],
     hdrs = ["conv.h"],

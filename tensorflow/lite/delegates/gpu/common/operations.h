@@ -71,7 +71,8 @@ enum class OperationType {
   TANH,
   UPSAMPLE_2D,
   NEG,
-  EXP
+  EXP,
+  REDUCE_MAX
 };
 
 std::string ToString(enum OperationType op);
@@ -169,6 +170,10 @@ struct Convolution2DAttributes {
 
   Tensor<OHWI, DataType::FLOAT32> weights;
   Tensor<Linear, DataType::FLOAT32> bias;  // optional
+};
+
+struct ReduceMaxAttributes {
+  Tensor<Scalar, DataType::INT32> axis;
 };
 
 // @return shape of a tensor after Convolution2D operation is applied to
