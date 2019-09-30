@@ -1919,8 +1919,8 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
       return make_unique<ReLuOperationParser>(0);
     case kTfLiteBuiltinPrelu:
       return make_unique<PReLuOperationParser>();
-    case kTfLiteBuiltinReshape:
-      return make_unique<ReshapeOperationParser>();
+    // case kTfLiteBuiltinReshape:
+    //   return make_unique<ReshapeOperationParser>();
     case kTfLiteBuiltinResizeBilinear:
       return make_unique<ResizeBilinearOperationParser>();
     case kTfLiteBuiltinRsqrt:

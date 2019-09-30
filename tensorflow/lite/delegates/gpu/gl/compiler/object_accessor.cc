@@ -336,8 +336,8 @@ struct TextureImageTypeGetter {
         return "iimage2DArray";
       case DataType::FLOAT16:
       case DataType::FLOAT32:
-      case DataType::UNKNOWN:
         return "image2DArray";
+      case DataType::UNKNOWN:
       default:
         return "unknown";
     }
@@ -361,10 +361,10 @@ std::string ToImageLayoutQualifier(DataType type) {
     case DataType::INT32:
       return "rgba32i";
     case DataType::FLOAT16:
-    case DataType::UNKNOWN:
       return "rgba16f";
     case DataType::FLOAT32:
       return "rgba32f";
+    case DataType::UNKNOWN:
     default:
       return "unknown";
   }
@@ -375,12 +375,12 @@ std::string ToImagePrecision(DataType type) {
     case DataType::UINT16:
     case DataType::INT16:
     case DataType::FLOAT16:
-    case DataType::UNKNOWN:
       return "mediump";
     case DataType::UINT32:
     case DataType::INT32:
     case DataType::FLOAT32:
       return "highp";
+    case DataType::UNKNOWN:
     default:
       return "unknown";
   }
