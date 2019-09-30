@@ -26,7 +26,7 @@ size_t SizeOf(DataType data_type) {
     case DataType::UINT8:
     case DataType::INT8:
     case DataType::UNKNOWN:
-      return 1;
+      return 4;
     case DataType::FLOAT16:
     case DataType::INT16:
     case DataType::UINT16:
