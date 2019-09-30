@@ -130,7 +130,6 @@ Status ShaderCodegen::Build(CompiledNodeAttributes attr,
     source_code = absl::StrCat(parameters.GetConstDeclarations(), source_code);
   }
 
-  std::cout << ">>>BuildSource : " << source_code << std::endl << "<<<<<<<<<<<";
   std::string declarations = absl::StrCat(
       objects.GetFunctionsDeclarations(), "\n", objects.GetObjectDeclarations(),
       "\n", parameters.GetUniformDeclarations());

@@ -416,7 +416,6 @@ TfLiteStatus InterpreterBuilder::ParseTensors(
         status = kTfLiteError;
       }
 
-      std::cout << ">>>ParseTensors: " << get_name(tensor) << std::endl;
       if (subgraph->SetTensorParametersReadOnly(
               i, type, get_name(tensor), dims, quantization, buffer_ptr,
               buffer_size, allocation_) != kTfLiteOk) {

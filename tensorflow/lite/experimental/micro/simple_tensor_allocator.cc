@@ -100,7 +100,6 @@ TfLiteStatus SimpleTensorAllocator::AllocateTensor(
     }
   }
   if (result->data.raw) {
-    std::cout << "kTfLiteMmapRo: " << result->name << " " << result->type << std::endl;
     result->allocation_type = kTfLiteMmapRo;
   } else {
     int data_size = 1;
