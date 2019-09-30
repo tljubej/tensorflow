@@ -284,7 +284,7 @@ std::string ToAccessModifier(AccessType access, bool use_readonly_modifier) {
 }
 
 std::string ToBufferType(DataType data_type) {
-  std::cout << ">>>DataTypeToBuffer: " << data_type << std::endl;
+  std::cout << ">>>DataTypeToBuffer: " << (int)data_type << std::endl;
   switch (data_type) {
     case DataType::UINT8:
     case DataType::UINT16:
