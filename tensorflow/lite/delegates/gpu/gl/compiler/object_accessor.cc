@@ -417,6 +417,7 @@ void AddSizeParameters(absl::string_view object_name, const Object& object,
 
 void GenerateObjectDeclaration(absl::string_view name, const Object& object,
                                std::string* declaration, bool is_mali) {
+  std::cout << ">>>DataTypeName: " << name << " DataType: " << (int)object.data_type << std::endl;
   switch (object.object_type) {
     case ObjectType::BUFFER:
       // readonly modifier used to fix shader compilation for Mali on Android 8,
