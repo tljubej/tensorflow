@@ -179,6 +179,7 @@ Status SetAllDimensions<BHWC>(const TfLiteIntArray* dimensions, BHWC* shape) {
 }
 
 DataType ToDataType(TfLiteType type) {
+  std::cout << ">>>DataType: " << type << std::endl;
   switch (type) {
     case kTfLiteFloat32:
       return DataType::FLOAT32;

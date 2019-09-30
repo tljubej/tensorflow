@@ -13,6 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
+#include <iostream>
+
 #include "tensorflow/lite/delegates/gpu/gl/compiler/object_accessor.h"
 
 #include "absl/strings/ascii.h"
@@ -282,6 +284,7 @@ std::string ToAccessModifier(AccessType access, bool use_readonly_modifier) {
 }
 
 std::string ToBufferType(DataType data_type) {
+  std::cout << ">>>DataTypeToBuffer: " << data_type << std::endl;
   switch (data_type) {
     case DataType::UINT8:
     case DataType::UINT16:
@@ -296,8 +299,6 @@ std::string ToBufferType(DataType data_type) {
     case DataType::FLOAT32:
       return "vec4";
     case DataType::FLOAT64:
-    case DataType::INT64:
-    case DataType::UINT64:
       return "dvec4";
     default:
       return "unknown";
