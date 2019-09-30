@@ -1511,7 +1511,9 @@ class FullyConnectedOperationParser : public TFLiteOperationParser {
     }
 
     Node* conv = node;
+    std::cout << ">>>Before Add Reshape" << std::endl;
     if (input->tensor.shape.h != 1 || input->tensor.shape.w != 1) {
+      std::cout << ">>>In add Reshape" << std::endl;
       auto& reshape = node;
       conv = graph->NewNode();  // reset conv pointer!
       Value<TensorRefFloat32>* reshaped_value = graph->NewValue();
