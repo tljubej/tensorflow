@@ -16,6 +16,7 @@ limitations under the License.
 #include "tensorflow/lite/delegates/gpu/gl/compiler/shader_codegen.h"
 
 #include <algorithm>
+#include <iostream>
 
 #include "absl/strings/str_cat.h"
 #include "tensorflow/lite/delegates/gpu/common/status.h"
@@ -129,6 +130,7 @@ Status ShaderCodegen::Build(CompiledNodeAttributes attr,
     source_code = absl::StrCat(parameters.GetConstDeclarations(), source_code);
   }
 
+  std::cout << ">>>BuildSource : " << source_code << std::endl << "<<<<<<<<<<<";
   std::string declarations = absl::StrCat(
       objects.GetFunctionsDeclarations(), "\n", objects.GetObjectDeclarations(),
       "\n", parameters.GetUniformDeclarations());
