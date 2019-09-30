@@ -179,7 +179,6 @@ Status SetAllDimensions<BHWC>(const TfLiteIntArray* dimensions, BHWC* shape) {
 }
 
 DataType ToDataType(TfLiteType type) {
-  std::cout << ">>>DataType: " << (int)type << std::endl;
   switch (type) {
     case kTfLiteFloat32:
       return DataType::FLOAT32;
@@ -241,7 +240,6 @@ class ObjectReader {
     if (idx >= tflite_node_->inputs->size) {
       return OutOfRangeError(StrCat("ReadValue: input tensor index: ", idx));
     }
-    std::cout << ">>>ReadValue" << std::endl;
     RETURN_IF_ERROR(
         ReadValueByTensorIdx(tflite_node_->inputs->data[idx], value));
     return OkStatus();
@@ -299,14 +297,12 @@ class ObjectReader {
 
   Status AddInput(const Node* node, uint32_t idx) {
     Value<TensorRefFloat32>* input;
-    std::cout << ">>>AddInput id:" << node->id << " op:" << node->operation.type << std::endl;
     RETURN_IF_ERROR(ReadValue(idx, &input));
     return graph_->AddConsumer(node->id, input->id);
   }
 
   Status ReadValueByTensorIdx(uint32_t tensor_idx,
                               Value<TensorRefFloat32>** value) {
-    std::cout << ">>>ReadValueByTensorIdx" << std::endl;
     if (tensor_idx >= tensor_to_value_->size()) {
       return OutOfRangeError(
           StrCat("ReadValue: input tensor index: ", tensor_idx));
@@ -314,7 +310,6 @@ class ObjectReader {
     if ((*tensor_to_value_)[tensor_idx] == nullptr) {
       const TfLiteTensor& tflite_tensor = context_->tensors[tensor_idx];
       if (tflite::IsConstantTensor(&tflite_tensor)) {
-        std::cout << "Failed at: " << tflite_tensor.name << " " << tflite_tensor.type << std::endl;
         return NotFoundError(
             StrCat("ReadValue: value is a constant tensor: ", tensor_idx));
       }
@@ -676,7 +671,6 @@ class ConcatenationOperationParser : public TFLiteOperationParser {
     std::vector<const Value<TensorRefFloat32>*> inputs;
     for (uint32_t idx = 0; idx < tflite_node->inputs->size; ++idx) {
       Value<TensorRefFloat32>* value;
-      std::cout << ">>>ConcatenationOperationParser::Parse" << std::endl;
       const auto status = reader->ReadValue(idx, &value);
       if (status.ok()) {
         inputs.push_back(value);
@@ -1142,12 +1136,10 @@ class LstmOperationParser : public TFLiteOperationParser {
 
     Value<TensorRefFloat32>* concat_temp;
     int concat_tensor_idx = tflite_node->outputs->data[2];
-    std::cout << ">>>LstmOperationParser::Parse 1" << std::endl;
     RETURN_IF_ERROR(
         reader->ReadValueByTensorIdx(concat_tensor_idx, &concat_temp));
     Value<TensorRefFloat32>* activ_temp;
     int activ_tensor_idx = tflite_node->outputs->data[3];
-    std::cout << ">>>LstmOperationParser::Parse 2" << std::endl;
     RETURN_IF_ERROR(
         reader->ReadValueByTensorIdx(activ_tensor_idx, &activ_temp));
 
@@ -1290,7 +1282,6 @@ class ElementwiseOperationParser : public TFLiteOperationParser {
     node->operation.type = ToString(operation_type_);
 
     if (IsOneArgumentOperation()) {
-      std::cout << ">>>ElementwiseOperationParser " << ToString(operation_type_) << std::endl;
       RETURN_IF_ERROR(reader->AddInput(node, 0));
     } else if (IsTwoArgumentOperation()) {
       if (tflite_node->inputs->size != 2) {
@@ -1458,7 +1449,6 @@ class MulOperationParser : public TFLiteOperationParser {
       RETURN_IF_ERROR(reader->AddInput(node, 1));
     } else {
       node->operation.type = ToString(OperationType::MULTIPLY_SCALAR);
-      std::cout << ">>>MulOperationParser" << std::endl;
       RETURN_IF_ERROR(reader->AddInput(node, 1));
       MultiplyScalarAttributes attr;
       TfLiteIntArray dims;
@@ -1562,7 +1552,6 @@ class StridedSliceOperationParser : public TFLiteOperationParser {
     node->operation.type = ToString(OperationType::SLICE);
     RETURN_IF_ERROR(reader->AddOutputs(node));
     Value<TensorRefFloat32>* input;
-    std::cout << ">>>StridedSliceOperationParser::Parse" << std::endl;
     RETURN_IF_ERROR(reader->ReadValue(0, &input));
     RETURN_IF_ERROR(graph->AddConsumer(node->id, input->id));
 
@@ -1726,7 +1715,6 @@ class TransposeConvOperationParser : public TFLiteOperationParser {
     auto* node = graph->NewNode();
     node->operation.type = ToString(OperationType::CONVOLUTION_TRANSPOSED);
     Value<TensorRefFloat32>* input;
-    std::cout << ">>>TransposeConvOperationParser" << std::endl;
     RETURN_IF_ERROR(reader->ReadValue(2, &input));
     RETURN_IF_ERROR(graph->AddConsumer(node->id, input->id));
     RETURN_IF_ERROR(reader->AddOutputs(node));
@@ -1960,8 +1948,8 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
       return make_unique<ElementwiseOperationParser>(OperationType::EXP);
     case kTfLiteBuiltinTransposeConv:
       return make_unique<TransposeConvOperationParser>();
-    // case kTfLiteBuiltinReduceMax:
-    //   return make_unique<ReduceMaxOperationParser>();
+    case kTfLiteBuiltinReduceMax:
+      return make_unique<ReduceMaxOperationParser>();
 
     case kTfLiteBuiltinCustom:
       if (custom_name == "Convolution2DTransposeBias") {

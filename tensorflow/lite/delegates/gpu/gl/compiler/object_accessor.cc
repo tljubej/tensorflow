@@ -284,7 +284,6 @@ std::string ToAccessModifier(AccessType access, bool use_readonly_modifier) {
 }
 
 std::string ToBufferType(DataType data_type) {
-  std::cout << ">>>DataTypeToBuffer: " << (int)data_type << std::endl;
   switch (data_type) {
     case DataType::UINT8:
     case DataType::UINT16:
@@ -417,7 +416,6 @@ void AddSizeParameters(absl::string_view object_name, const Object& object,
 
 void GenerateObjectDeclaration(absl::string_view name, const Object& object,
                                std::string* declaration, bool is_mali) {
-  std::cout << ">>>DataTypeName: " << name << " DataType: " << (int)object.data_type << std::endl;
   switch (object.object_type) {
     case ObjectType::BUFFER:
       // readonly modifier used to fix shader compilation for Mali on Android 8,

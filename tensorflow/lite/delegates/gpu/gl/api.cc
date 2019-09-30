@@ -231,7 +231,6 @@ class CompiledModelImpl
     auto it = shader_to_index_.find(shader_src);
     if (it == shader_to_index_.end()) {
       GlShader shader;
-      std::cout << ">>>>>>" << std::endl << shader_src << "<<<<<<<<<" << std::endl;
       RETURN_IF_ERROR(
           GlShader::CompileShader(GL_COMPUTE_SHADER, shader_src, &shader));
       shaders_.push_back(std::move(shader));
@@ -263,7 +262,6 @@ class CompiledModelImpl
     auto runtime = absl::make_unique<Runtime>(options, gpu_info_, command_queue,
                                               refs ? refs.get() : objects);
     for (auto& c : programs_) {
-      std::cout << ">>>NewRun program: " << std::endl;
       RETURN_IF_ERROR(runtime->AddProgram(shaders_[c.shader_idx], c.parameters,
                                           c.objects, c.num_workgroups));
     }
