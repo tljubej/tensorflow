@@ -361,6 +361,7 @@ std::string ToImageLayoutQualifier(DataType type) {
     case DataType::INT32:
       return "rgba32i";
     case DataType::FLOAT16:
+    case DataType::UNKNOWN:
       return "rgba16f";
     case DataType::FLOAT32:
       return "rgba32f";
