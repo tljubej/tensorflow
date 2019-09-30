@@ -301,7 +301,7 @@ std::string ToBufferType(DataType data_type) {
     case DataType::FLOAT64:
       return "dvec4";
     default:
-      return "unknown";
+      return "uvec4";
   }
 }
 

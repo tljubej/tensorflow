@@ -25,6 +25,7 @@ size_t SizeOf(DataType data_type) {
   switch (data_type) {
     case DataType::UINT8:
     case DataType::INT8:
+    case DataType::UNKNOWN:
       return 1;
     case DataType::FLOAT16:
     case DataType::INT16:
@@ -38,8 +39,6 @@ size_t SizeOf(DataType data_type) {
     case DataType::INT64:
     case DataType::UINT64:
       return 8;
-    case DataType::UNKNOWN:
-      return 0;
   }
   return 0;
 }
