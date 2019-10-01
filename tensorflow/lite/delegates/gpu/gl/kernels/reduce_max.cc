@@ -62,7 +62,7 @@ class ReduceMax : public NodeShader {
     "float MAXF = -3.402823466e+38;"
     "vec4 maxv = vec4(MAXF, MAXF, MAXF, MAXF);\n"
     "for (int i = 0; i < $axis_count$; i++) {\n"
-    "  maxv = max(maxv, $input_data_0" + indexers_input[idx_from_axis] + "$;\n"
+    "  maxv = max(maxv, $input_data_0" + indexers_input[idx_from_axis] + "$);\n"
     "}\n"
     "$output_data_0" + indexers_output[idx_from_axis] + "$ = maxv;\n";
 
