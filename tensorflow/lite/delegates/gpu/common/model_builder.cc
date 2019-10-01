@@ -1923,8 +1923,8 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
       return make_unique<ReLuOperationParser>(0);
     case kTfLiteBuiltinPrelu:
       return make_unique<PReLuOperationParser>();
-    // case kTfLiteBuiltinReshape:
-    //   return make_unique<ReshapeOperationParser>();
+    case kTfLiteBuiltinReshape:
+      return make_unique<ReshapeOperationParser>();
     case kTfLiteBuiltinResizeBilinear:
       return make_unique<ResizeBilinearOperationParser>();
     case kTfLiteBuiltinRsqrt:
@@ -1952,8 +1952,8 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
       return make_unique<ElementwiseOperationParser>(OperationType::EXP);
     case kTfLiteBuiltinTransposeConv:
       return make_unique<TransposeConvOperationParser>();
-    // case kTfLiteBuiltinReduceMax:
-    //   return make_unique<ReduceMaxOperationParser>();
+    case kTfLiteBuiltinReduceMax:
+      return make_unique<ReduceMaxOperationParser>();
 
     case kTfLiteBuiltinCustom:
       if (custom_name == "Convolution2DTransposeBias") {
