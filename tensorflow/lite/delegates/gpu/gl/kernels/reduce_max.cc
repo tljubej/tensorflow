@@ -59,12 +59,13 @@ class ReduceMax : public NodeShader {
     auto idx_from_axis = attr.axis.data.back() - 1;
 
     auto code =
-    "for (int i = 0; i < $axis_count$; i++) {"
-    "  if ($input_data_0" + indexers_input[idx_from_axis] + "$[0] > $output_data_0" + indexers_output[idx_from_axis] + "$[0]) {"
-    "    $output_data_0" + indexers_output[idx_from_axis] + "$ = $input_data_0" + indexers_input[idx_from_axis] + "$;"
-    "  }"
-    "}"
-    "$output_data_0" + indexers_output[idx_from_axis] + "$ = $input_data_0" + indexers_output[idx_from_axis] + "$;";
+    "float max = -3.402823466e+38;\n"
+    "for (int i = 0; i < $axis_count$; i++) {\n"
+    "  if ($input_data_0" + indexers_input[idx_from_axis] + "$[0] > max) {\n"
+    "    max = $input_data_0" + indexers_input[idx_from_axis] + "$;\n"
+    "  }\n"
+    "}\n"
+    "$output_data_0" + indexers_output[idx_from_axis] + "$ = $input_data_0" + indexers_output[idx_from_axis] + "$;\n";
 
     std::vector<UniformParameter> parameters {
         UniformParameter{"axis_count", UniformParameter::ValueType(axis_count)},
