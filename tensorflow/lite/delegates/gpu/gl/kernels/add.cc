@@ -33,7 +33,10 @@ namespace gl {
 namespace {
 
 class Add : public NodeShader {
+ private:
+    std::string op_;
  public:
+  Add(const std::string& op = "+") : op_(op) {}
   Status GenerateCode(const GenerationContext& ctx,
                       GeneratedCode* generated_code) const final {
     auto attr = absl::any_cast<AddAttributes>(ctx.node->operation.attributes);
@@ -53,7 +56,7 @@ class Add : public NodeShader {
             /*workload=*/uint3(),
             /*workgroup=*/uint3(),
             /*source_code=*/
-            "value_0 = $input_data_1[gid.z]$ + $input_data_0[gid.x, gid.y, "
+            "value_0 = $input_data_1[gid.z]$ " + op_ + " $input_data_0[gid.x, gid.y, "
             "gid.z]$;",
             /*input=*/IOStructure::ONLY_DEFINITIONS,
             /*output=*/IOStructure::AUTO,
@@ -66,7 +69,7 @@ class Add : public NodeShader {
         if (inputs[index]->tensor.shape != inputs[0]->tensor.shape) {
           return InvalidArgumentError("Shapes are not equal");
         }
-        absl::StrAppend(&code, " + value_", index);
+        absl::StrAppend(&code, op_ + " value_", index);
       }
       absl::StrAppend(&code, ";");
       *generated_code = {
@@ -87,7 +90,7 @@ class Add : public NodeShader {
           /*objects=*/{},
           /*workload=*/uint3(),
           /*workgroup=*/uint3(),
-          /*source_code=*/"value_0 += $scalar$;",
+          /*source_code=*/"value_0 " + op_ + "= $scalar$;",
           /*input=*/IOStructure::AUTO,
           /*output=*/IOStructure::AUTO,
       };
@@ -100,7 +103,7 @@ class Add : public NodeShader {
           /*workload=*/
           uint3(shape.w, shape.h, IntegralDivideRoundUp(shape.c, 4)),
           /*workgroup=*/uint3(),
-          /*source_code=*/"value_0 += $add_buffer[gid.z]$;",
+          /*source_code=*/"value_0 " + op_ + "= $add_buffer[gid.z]$;",
           /*input=*/IOStructure::AUTO,
           /*output=*/IOStructure::AUTO,
       };
@@ -114,6 +117,10 @@ class Add : public NodeShader {
 
 std::unique_ptr<NodeShader> NewAddNodeShader() {
   return absl::make_unique<Add>();
+}
+
+std::unique_ptr<NodeShader> NewSubNodeShader() {
+  return absl::make_unique<Add>("-");
 }
 
 }  // namespace gl

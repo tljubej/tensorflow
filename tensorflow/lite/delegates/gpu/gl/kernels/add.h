@@ -26,6 +26,7 @@ namespace gpu {
 namespace gl {
 
 std::unique_ptr<NodeShader> NewAddNodeShader();
+std::unique_ptr<NodeShader> NewSubNodeShader();
 
 }  // namespace gl
 }  // namespace gpu

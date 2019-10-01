@@ -1014,7 +1014,10 @@ class SoftMaxOperationParser : public TFLiteOperationParser {
 };
 
 class AddOperationParser : public TFLiteOperationParser {
+ private:
+  OperationType type_;
  public:
+  AddOperationParser(OperationType type) : type_(type) {}
   Status IsSupported(const TfLiteContext* context,
                      const TfLiteNode* tflite_node,
                      const TfLiteRegistration* registration) final {
@@ -1028,7 +1031,7 @@ class AddOperationParser : public TFLiteOperationParser {
                const TfLiteRegistration* registration, GraphFloat32* graph,
                ObjectReader* reader) final {
     Node* node = graph->NewNode();
-    node->operation.type = ToString(OperationType::ADD);
+    node->operation.type = ToString(type_);
     RETURN_IF_ERROR(reader->AddOutputs(node));
 
     AddAttributes attr;
@@ -1940,7 +1943,7 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
       return make_unique<ElementwiseOperationParser>(
           OperationType::SQUARED_DIFF);
     case kTfLiteBuiltinSub:
-      return make_unique<ElementwiseOperationParser>(OperationType::SUB);
+      return make_unique<AddOperationParser>(OperationType::SUB);
     case kTfLiteBuiltinTanh:
       return make_unique<ElementwiseOperationParser>(OperationType::TANH);
     case kTfLiteBuiltinNeg:

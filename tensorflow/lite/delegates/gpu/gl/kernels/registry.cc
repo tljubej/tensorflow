@@ -70,6 +70,7 @@ class Registry : public NodeShader {
     };
 
     insert_op(Type::ADD, NewAddNodeShader);
+    insert_op(Type::SUB, NewSubNodeShader);
     insert_op(Type::APPLY_MASK, NewApplyMaskNodeShader);
     insert_op(Type::CONCAT, NewAlignedConcatNodeShader);
     insert_op(Type::CONCAT, NewFlatConcatNodeShader);
@@ -100,7 +101,7 @@ class Registry : public NodeShader {
     insert_elementwise_op(Type::SQRT);
     insert_elementwise_op(Type::SQUARE);
     insert_elementwise_op(Type::TANH);
-    insert_elementwise_op(Type::SUB);
+    //insert_elementwise_op(Type::SUB);
     insert_elementwise_op(Type::DIV);
     insert_elementwise_op(Type::POW);
     insert_elementwise_op(Type::SQUARED_DIFF);
