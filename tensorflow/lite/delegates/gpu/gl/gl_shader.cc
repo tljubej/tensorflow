@@ -56,6 +56,7 @@ Status GlShader::CompileShader(GLenum shader_type,
   RETURN_IF_ERROR(
       TFLITE_GPU_CALL_GL(glShaderSource, shader.id(), 1, &src, nullptr));
 
+  std::cout << ">>>>>CompileShader>>>>>" << std::endl << shader_source << std::endl << "<<<<<<<<<<<<<<<<<<" << std::endl;
   glCompileShader(shader.id());
   // Didn't check for opengl errors here because we want to get better logs
   // if it didn't compile.
