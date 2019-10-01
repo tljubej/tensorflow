@@ -63,6 +63,22 @@ class Add : public NodeShader {
         };
         return OkStatus();
       }
+      else if (inputs.size() == 2 && inputs[0]->tensor.shape != inputs[1]->tensor.shape &&
+                inputs[0]->tensor.shape.w == inputs[1]->tensor.shape.w &&
+                inputs[0]->tensor.shape.h == inputs[1]->tensor.shape.h &&
+                inputs[1]->tensor.shape.c == 1 && inputs[0]->tensor.shape.c > 1) {
+        *generated_code = {
+            /*parameters=*/{},
+            /*objects=*/{},
+            /*workload=*/uint3(),
+            /*workgroup=*/uint3(),
+            /*source_code=*/
+            "value_0 = $input_data_0[gid.x, gid.y, gid.z]$" + op_ + " $input_data_1[gid.x, gid.y]$;",
+            /*input=*/IOStructure::ONLY_DEFINITIONS,
+            /*output=*/IOStructure::AUTO,
+         };
+         return OkStatus();
+      }
 
       std::string code = "value_0 = value_0";
       for (int index = 1; index < inputs.size(); ++index) {
