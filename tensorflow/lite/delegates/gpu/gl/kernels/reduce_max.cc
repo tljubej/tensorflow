@@ -64,7 +64,7 @@ class ReduceMax : public NodeShader {
     "    $input_data_0" + indexers_output[idx_from_axis] + "$ = $input_data_0" + indexers_input[idx_from_axis] + "$;"
     "  }"
     "}"
-    "$output_data_0" + indexers_output[idx_from_axis] + "$ = input_data_0" + indexers_output[idx_from_axis] + "$;";
+    "$output_data_0" + indexers_output[idx_from_axis] + "$ = $input_data_0" + indexers_output[idx_from_axis] + "$;";
 
     std::vector<UniformParameter> parameters {
         UniformParameter{"axis_count", UniformParameter::ValueType(axis_count)},
