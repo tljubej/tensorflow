@@ -1886,7 +1886,7 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
     case kTfLiteBuiltinAbs:
       return make_unique<ElementwiseOperationParser>(OperationType::ABS);
     case kTfLiteBuiltinAdd:
-      return make_unique<AddOperationParser>();
+      return make_unique<AddOperationParser>(OperationType::ADD);
     case kTfLiteBuiltinAveragePool2d:
       return make_unique<Pooling2DOperationParser>(PoolingType::AVERAGE);
     case kTfLiteBuiltinConcatenation:
