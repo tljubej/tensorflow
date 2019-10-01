@@ -60,8 +60,8 @@ class ReduceMax : public NodeShader {
 
     auto code =
     "for (int i = 0; i < $axis_count$; i++) {"
-    "  if ($input_data_0" + indexers_input[idx_from_axis] + "$[0] > $input_data_0" + indexers_output[idx_from_axis] + "$[0]) {"
-    "    $input_data_0" + indexers_output[idx_from_axis] + "$ = $input_data_0" + indexers_input[idx_from_axis] + "$;"
+    "  if ($input_data_0" + indexers_input[idx_from_axis] + "$[0] > $output_data_0" + indexers_output[idx_from_axis] + "$[0]) {"
+    "    $output_data_0" + indexers_output[idx_from_axis] + "$ = $input_data_0" + indexers_input[idx_from_axis] + "$;"
     "  }"
     "}"
     "$output_data_0" + indexers_output[idx_from_axis] + "$ = $input_data_0" + indexers_output[idx_from_axis] + "$;";
