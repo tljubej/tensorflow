@@ -92,7 +92,7 @@ Interpreter::TfLiteDelegatePtr CreateNNAPIDelegate() {
 
 Interpreter::TfLiteDelegatePtr CreateGPUDelegate(
     tflite::FlatBufferModel* model) {
-#if defined(__ANDROID__)
+#if defined(__ANDROID__) || defined(ANDROID)
   TfLiteGpuDelegateOptions options;
   options.metadata = TfLiteGpuDelegateGetModelMetadata(model->GetModel());
   options.compile_options.precision_loss_allowed = 1;
