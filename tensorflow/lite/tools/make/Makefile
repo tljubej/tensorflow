@@ -209,6 +209,14 @@ BENCHMARK_ALL_SRCS := $(TF_LITE_CC_SRCS) \
 	$(PROFILE_SUMMARIZER_SRCS) \
   $(CMD_LINE_TOOLS_SRCS) \
 	$(EVALUATION_UTILS_SRCS)
+ifeq ($(TARGET),resideo)
+BENCHMARK_ALL_SRCS += \
+$(wildcard tensorflow/lite/delegates/gpu/common/*.cc) \
+$(wildcard tensorflow/lite/delegates/gpu/common/*/*.cc) \
+$(wildcard tensorflow/lite/delegates/gpu/gl/*.cc) \
+$(wildcard tensorflow/lite/delegates/gpu/gl/*/*.cc) \
+$(wildcard tensorflow/lite/delegates/gpu/gl_delegate.cc)
+endif
 
 BENCHMARK_SRCS := $(filter-out \
 	$(wildcard $(BENCHMARK_SRCS_DIR)/*_test.cc) \
