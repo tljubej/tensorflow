@@ -58,7 +58,7 @@ LIBS := \
 # these settings are for the target compiler.
 CXXFLAGS := -O3 -DNDEBUG -fPIC
 ifeq ($(TARGET),resideo)
-CXXFLAGS += -DANDROID
+CXXFLAGS += -DANDROID -DTFLITE_GPU_BINARY_RELEASE
 endif
 CXXFLAGS += $(EXTRA_CXXFLAGS)
 CFLAGS := ${CXXFLAGS}
@@ -210,13 +210,6 @@ BENCHMARK_ALL_SRCS := $(TF_LITE_CC_SRCS) \
   $(CMD_LINE_TOOLS_SRCS) \
 	$(EVALUATION_UTILS_SRCS)
 ifeq ($(TARGET),resideo)
-BENCHMARK_ALL_SRCS += \
-$(wildcard tensorflow/lite/delegates/gpu/common/*.cc) \
-$(wildcard tensorflow/lite/delegates/gpu/common/*/*.cc) \
-$(wildcard tensorflow/lite/delegates/gpu/gl/*.cc) \
-$(wildcard tensorflow/lite/delegates/gpu/gl/*/*.cc) \
-$(wildcard tensorflow/lite/delegates/gpu/gl_delegate.cc)
-endif
 
 BENCHMARK_SRCS := $(filter-out \
 	$(wildcard $(BENCHMARK_SRCS_DIR)/*_test.cc) \
