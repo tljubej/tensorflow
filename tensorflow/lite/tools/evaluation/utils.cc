@@ -25,7 +25,7 @@ limitations under the License.
 
 #include "tensorflow/lite/delegates/nnapi/nnapi_delegate.h"
 
-#if defined(__ANDROID__)
+#if defined(__ANDROID__) || defined(ANDROID)
 #include "tensorflow/lite/delegates/gpu/gl_delegate.h"
 #endif
 
