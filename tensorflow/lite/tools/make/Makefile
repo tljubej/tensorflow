@@ -209,7 +209,6 @@ BENCHMARK_ALL_SRCS := $(TF_LITE_CC_SRCS) \
 	$(PROFILE_SUMMARIZER_SRCS) \
   $(CMD_LINE_TOOLS_SRCS) \
 	$(EVALUATION_UTILS_SRCS)
-ifeq ($(TARGET),resideo)
 
 BENCHMARK_SRCS := $(filter-out \
 	$(wildcard $(BENCHMARK_SRCS_DIR)/*_test.cc) \
