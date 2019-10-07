@@ -24,6 +24,7 @@ limitations under the License.
 #include "tensorflow/lite/model.h"
 #include "tensorflow/lite/profiling/profiler.h"
 #include "tensorflow/lite/tools/benchmark/benchmark_model.h"
+#include "tensorflow/lite/delegates/gpu/gl_delegate.h"
 
 namespace tflite {
 namespace benchmark {
