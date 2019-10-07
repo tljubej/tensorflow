@@ -298,9 +298,9 @@ benchmark_lib: $(BENCHMARK_LIB)
 
 $(BENCHMARK_BINARY) : $(BENCHMARK_LIB)
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) \
+	$(CXX) $(CXXFLAGS) -lGLESv2_adreno -lEGL_adreno $(INCLUDES) \
 	-o $(BENCHMARK_BINARY) \
-	$(LIBFLAGS) $(BENCHMARK_LIB) $(LDFLAGS) $(LIBS)
+	$(LIBFLAGS) $(BENCHMARK_LIB) $(LDFLAGS) $(LIBS) $(shell find $(MAKEFILE_DIR)/downloads/absl/ -name "*.o")
 
 benchmark: $(BENCHMARK_BINARY)
 
