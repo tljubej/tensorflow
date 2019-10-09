@@ -22,6 +22,8 @@ limitations under the License.
 #include <unordered_set>
 #include <vector>
 #include <iostream>
+#include <fstream>
+#include <unistd.h>
 
 #include <EGL/egl.h>
 #include <GLES3/gl31.h>
@@ -131,6 +133,39 @@ class Delegate {
                                /* has_ownership = */ false));
   }
 
+double process_mem_usage()
+{
+   using std::ios_base;
+   using std::ifstream;
+   using std::string;
+
+   // 'file' stat seems to give the most reliable results
+   //
+   ifstream stat_stream("/proc/self/stat",ios_base::in);
+
+   // dummy vars for leading entries in stat that we don't care about
+   //
+   string pid, comm, state, ppid, pgrp, session, tty_nr;
+   string tpgid, flags, minflt, cminflt, majflt, cmajflt;
+   string utime, stime, cutime, cstime, priority, nice;
+   string O, itrealvalue, starttime;
+
+   // the two fields we want
+   //
+   unsigned long vsize;
+   long rss;
+
+   stat_stream >> pid >> comm >> state >> ppid >> pgrp >> session >> tty_nr
+               >> tpgid >> flags >> minflt >> cminflt >> majflt >> cmajflt
+               >> utime >> stime >> cutime >> cstime >> priority >> nice
+               >> O >> itrealvalue >> starttime >> vsize >> rss; // don't care about the rest
+
+   stat_stream.close();
+
+   long page_size_kb = sysconf(_SC_PAGE_SIZE) / 1024; // in case x86-64 is configured to use 2MB pages
+   return rss * page_size_kb;
+}
+
   Status Prepare(TfLiteContext* context,
                  const TfLiteDelegateParams* delegate_params) {
     // Extract TFLite delegate execution plan from the context and convert it
@@ -193,16 +228,21 @@ class Delegate {
         // PHWC4. If yes, we may skip conversion step.
         // We need to keep same buffer in bhwc_objects_ to indicate there is
         // externally provided buffer.
+        std::cout << "Memory usage before buffer alloc: " << process_mem_usage() << std::endl;
         auto external_buffer = bhwc_objects_.FindBuffer(tensor_index);
         GlBuffer buffer;
         if (IsPHWC4(input->tensor.shape) && external_buffer) {
           buffer = external_buffer->MakeRef();
+          std::cout << "Memory usage after MakeRef: " << process_mem_usage() << std::endl;
         } else {
           RETURN_IF_ERROR(CreateReadWriteShaderStorageBuffer<float>(
               GetElementsSizeForPHWC4(input->tensor.shape), &buffer));
+          std::cout << "Memory usage after CreateReadWriteShaderStorageBuffer: " << process_mem_usage() << std::endl;
         }
         RETURN_IF_ERROR(
             phwc4_objects_.RegisterBuffer(input->id, std::move(buffer)));
+        std::cout << "Memory usage after RegisterBuffer: " << process_mem_usage() << std::endl;
+        
       }
     }
 
