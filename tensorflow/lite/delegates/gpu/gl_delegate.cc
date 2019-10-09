@@ -228,20 +228,20 @@ double process_mem_usage()
         // PHWC4. If yes, we may skip conversion step.
         // We need to keep same buffer in bhwc_objects_ to indicate there is
         // externally provided buffer.
-        std::cout << "Memory usage before buffer alloc: " << process_mem_usage() << std::endl;
+        std::cout << "Memory usage before buffer alloc input: " << process_mem_usage() << std::endl;
         auto external_buffer = bhwc_objects_.FindBuffer(tensor_index);
         GlBuffer buffer;
         if (IsPHWC4(input->tensor.shape) && external_buffer) {
           buffer = external_buffer->MakeRef();
-          std::cout << "Memory usage after MakeRef: " << process_mem_usage() << std::endl;
+          std::cout << "Memory usage after MakeRef input: " << process_mem_usage() << std::endl;
         } else {
           RETURN_IF_ERROR(CreateReadWriteShaderStorageBuffer<float>(
               GetElementsSizeForPHWC4(input->tensor.shape), &buffer));
-          std::cout << "Memory usage after CreateReadWriteShaderStorageBuffer: " << process_mem_usage() << std::endl;
+          std::cout << "Memory usage after CreateReadWriteShaderStorageBuffer input: " << process_mem_usage() << std::endl;
         }
         RETURN_IF_ERROR(
             phwc4_objects_.RegisterBuffer(input->id, std::move(buffer)));
-        std::cout << "Memory usage after RegisterBuffer: " << process_mem_usage() << std::endl;
+        std::cout << "Memory usage after RegisterBuffer input: " << process_mem_usage() << std::endl;
         
       }
     }
@@ -269,16 +269,20 @@ double process_mem_usage()
         // Create phwc4 output buffer.
         // Check whether there is externally provided object is already in
         // PHWC4. If yes, we may skip conversion step.
+        std::cout << "Memory usage before buffer alloc output: " << process_mem_usage() << std::endl;
         auto external_buffer = bhwc_objects_.FindBuffer(tensor_index);
         GlBuffer buffer;
         if (IsPHWC4(output->tensor.shape) && external_buffer) {
           buffer = external_buffer->MakeRef();
+          std::cout << "Memory usage after MakeRef output: " << process_mem_usage() << std::endl;
         } else {
           RETURN_IF_ERROR(CreateReadWriteShaderStorageBuffer<float>(
               GetElementsSizeForPHWC4(output->tensor.shape), &buffer));
+          std::cout << "Memory usage after CreateReadWriteShaderStorageBuffer output: " << process_mem_usage() << std::endl;
         }
         RETURN_IF_ERROR(
             phwc4_objects_.RegisterBuffer(output->id, std::move(buffer)));
+        std::cout << "Memory usage after RegisterBuffer output: " << process_mem_usage() << std::endl;
       }
     }
 
