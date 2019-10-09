@@ -301,6 +301,7 @@ double process_mem_usage()
     compile_options.dynamic_batch =
         static_cast<bool>(options_.compile_options.dynamic_batch_enabled);
     auto shaders = NewNodeShaderRegistry();
+    std::cout << "Memory usage after NewNodeShaderRegistry: " << process_mem_usage() << std::endl;
     GpuInfo gpu_info;
     RETURN_IF_ERROR(RequestGpuInfo(&gpu_info));
     command_queue_ = NewCommandQueue(gpu_info);
@@ -309,12 +310,14 @@ double process_mem_usage()
     std::unique_ptr<CompiledModel> compiled_model;
     RETURN_IF_ERROR(Compile(compile_options, graph, tflite_graph_io, *shaders,
                             *workgroups_calculator, &compiled_model));
+    std::cout << "Memory usage after shader compile: " << process_mem_usage() << std::endl;
 
     // Create inference context.
     const RuntimeOptions runtime_options;
     RETURN_IF_ERROR(compiled_model->NewRun(runtime_options, &phwc4_objects_,
                                            command_queue_.get(),
                                            &inference_context_));
+    std::cout << "Memory usage after NewRun: " << process_mem_usage() << std::endl;
     return OkStatus();
   }
 
