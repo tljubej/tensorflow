@@ -305,8 +305,10 @@ double process_mem_usage()
     GpuInfo gpu_info;
     RETURN_IF_ERROR(RequestGpuInfo(&gpu_info));
     command_queue_ = NewCommandQueue(gpu_info);
+    std::cout << "Memory usage NewCommandQueue: " << process_mem_usage() << std::endl;
     auto workgroups_calculator =
         BestEffortWorkgroupsCalculator(options_.metadata, gpu_info);
+    std::cout << "Memory usage BestEffortWorkgroupsCalculator: " << process_mem_usage() << std::endl;
     std::unique_ptr<CompiledModel> compiled_model;
     RETURN_IF_ERROR(Compile(compile_options, graph, tflite_graph_io, *shaders,
                             *workgroups_calculator, &compiled_model));
