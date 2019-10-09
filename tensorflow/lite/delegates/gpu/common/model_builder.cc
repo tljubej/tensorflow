@@ -1943,7 +1943,7 @@ std::unique_ptr<TFLiteOperationParser> NewOperationParser(
       return make_unique<ElementwiseOperationParser>(
           OperationType::SQUARED_DIFF);
     case kTfLiteBuiltinSub:
-      return make_unique<AddOperationParser>(OperationType::SUB);
+      return make_unique<ElementwiseOperationParser>(OperationType::SUB);
     case kTfLiteBuiltinTanh:
       return make_unique<ElementwiseOperationParser>(OperationType::TANH);
     case kTfLiteBuiltinNeg:
