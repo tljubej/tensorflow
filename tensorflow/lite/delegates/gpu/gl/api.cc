@@ -373,7 +373,9 @@ class CompiledModelImpl
 // @return true if all tensors have same batch value.
 bool IsBatchMatchesForAllValues(const GraphFloat32& model) {
   const int32_t b = model.values()[0]->tensor.shape.b;
+  std::cout << "b: " << b << std::endl;
   for (auto value : model.values()) {
+    std::cout << "value: " << value->tensor.shape.b << std::endl;
     if (value->tensor.shape.b != b) {
       return false;
     }
