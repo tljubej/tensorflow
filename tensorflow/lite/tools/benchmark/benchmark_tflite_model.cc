@@ -430,6 +430,17 @@ void BenchmarkTfLiteModel::Init() {
 
   interpreter->UseNNAPI(params_.Get<bool>("use_legacy_nnapi"));
 
+  auto interpreter_inputs = interpreter->inputs();
+  // Resize all non-string tensors.
+  for (int j = 0; j < inputs.size(); ++j) {
+    const InputLayerInfo& input = inputs[j];
+    int i = interpreter_inputs[j];
+    TfLiteTensor* t = interpreter->tensor(i);
+    if (t->type != kTfLiteString) {
+      interpreter->ResizeInputTensor(i, input.shape);
+    }
+  }
+
   delegates_ = GetDelegates();
   for (const auto& delegate : delegates_) {
     if (interpreter->ModifyGraphWithDelegate(delegate.second.get()) !=
@@ -442,7 +453,6 @@ void BenchmarkTfLiteModel::Init() {
 
   interpreter->SetAllowFp16PrecisionForFp32(params_.Get<bool>("allow_fp16"));
 
-  auto interpreter_inputs = interpreter->inputs();
 
   if (!inputs.empty()) {
     TFLITE_BENCHMARK_CHECK_EQ(inputs.size(), interpreter_inputs.size())
@@ -460,16 +470,6 @@ void BenchmarkTfLiteModel::Init() {
     if (input.name != t->name) {
       TFLITE_LOG(WARN) << "Tensor # " << i << " is named " << t->name
                        << " but flags call it " << input.name;
-    }
-  }
-
-  // Resize all non-string tensors.
-  for (int j = 0; j < inputs.size(); ++j) {
-    const InputLayerInfo& input = inputs[j];
-    int i = interpreter_inputs[j];
-    TfLiteTensor* t = interpreter->tensor(i);
-    if (t->type != kTfLiteString) {
-      interpreter->ResizeInputTensor(i, input.shape);
     }
   }
 
