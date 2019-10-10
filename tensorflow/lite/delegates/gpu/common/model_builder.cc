@@ -1519,7 +1519,7 @@ class FullyConnectedOperationParser : public TFLiteOperationParser {
       conv = graph->NewNode();  // reset conv pointer!
       Value<TensorRefFloat32>* reshaped_value = graph->NewValue();
       reshaped_value->tensor.type = input->tensor.type;
-      reshaped_value->tensor.shape = BHWC(1, 1, 1, weights.shape.w);
+      reshaped_value->tensor.shape = BHWC(input->tensor.shape.b, 1, 1, weights.shape.w);
       RETURN_IF_ERROR(graph->SetProducer(reshape->id, reshaped_value->id));
       reshape->operation.type = ToString(OperationType::RESHAPE);
       ReshapeAttributes attr;
