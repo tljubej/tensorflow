@@ -17,6 +17,7 @@ limitations under the License.
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "absl/strings/str_join.h"
 #include "tensorflow/lite/delegates/gpu/common/status.h"
@@ -59,18 +60,26 @@ struct ErrorFormatter {
 // TODO(akulik): create new error space for GL error.
 
 Status GetOpenGlErrors() {
+  std::cout << "Before glGetError 1" << std::endl;
   auto error = glGetError();
   if (error == GL_NO_ERROR) {
     return OkStatus();
   }
+  std::cout << "error 1: " << error << std::endl;
+
+  std::cout << "Before glGetError 2" << std::endl;
   auto error2 = glGetError();
+  std::cout << "error 2: " << error2 << std::endl;
   if (error2 == GL_NO_ERROR) {
     return InternalError(ErrorToString(error));
   }
   std::vector<GLenum> errors = {error, error2};
+  std::cout << "Before glGetError 3" << std::endl;
   for (error = glGetError(); error != GL_NO_ERROR; error = glGetError()) {
+  std::cout << "error3: " << error << std::endl;
     errors.push_back(error);
   }
+  std::cout << "Before error return" << std::endl;
   return InternalError(absl::StrJoin(errors, ",", ErrorFormatter()));
 }
 
