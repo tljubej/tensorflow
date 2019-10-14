@@ -286,9 +286,12 @@ TfLiteStatus Subgraph::ReplaceNodeSubsetsWithDelegateKernels(
     TfLiteRegistration registration, const TfLiteIntArray* nodes_to_replace,
     TfLiteDelegate* delegate) {
   // Ignore empty node replacement sets.
+  std::cout << "Begin replacenodes" << std::endl;
   if (!nodes_to_replace->size) {
     return kTfLiteOk;
   }
+
+  std::cout << "Begin replacenodes 2" << std::endl;
 
   TFLITE_LOG(tflite::TFLITE_LOG_INFO,
              "Replacing %d node(s) with delegate (%s) node.",
@@ -305,12 +308,20 @@ TfLiteStatus Subgraph::ReplaceNodeSubsetsWithDelegateKernels(
   PartitionGraphIntoIndependentNodeSubsets(&info, nodes_to_replace,
                                            &node_subsets);
 
+  std::cout << "After PartitionGraph" << std::endl;
+
+
   execution_plan_.clear();
+
+  std::cout << "After execution plan clear" << std::endl;
+
 
   for (auto& node_subset : node_subsets) {
     // Subsets claimed by the delegate should have a "macro" op created, the
     // other node_subsets (kTfNonPartition) just have their nodes added back to
     // the execution plan.
+    std::cout << "Node subset: " << node_subset.type << std::endl;
+
     switch (node_subset.type) {
       case NodeSubset::kTfNonPartition:
         for (auto it = node_subset.nodes.begin(); it != node_subset.nodes.end();
@@ -327,8 +338,13 @@ TfLiteStatus Subgraph::ReplaceNodeSubsetsWithDelegateKernels(
             node_subset.input_tensors, node_subset.output_tensors, nullptr, 0,
             params, &registration, &node_index));
 
+        std::cout << ">>After CreateDelegateParams" << std::endl;
+        
+
         // Initialize the output tensors's delegate-related fields.
         for (int tensor_index : node_subset.output_tensors) {
+          std::cout << ">>Init tensor delegate stuff" << tensor_index << std::endl;
+
           TfLiteTensor* tensor = &tensors_[tensor_index];
           TF_LITE_ENSURE(context_, tensor->delegate == nullptr ||
                                        tensor->delegate == delegate);
@@ -338,6 +354,9 @@ TfLiteStatus Subgraph::ReplaceNodeSubsetsWithDelegateKernels(
         // Associate the node with the delegate.
         TfLiteNode* node = &nodes_and_registration_[node_index].first;
         node->delegate = delegate;
+
+        std::cout << ">>Associate stuff" << std::endl;
+
       } break;
       case NodeSubset::kTfUnexplored:
         return kTfLiteError;
@@ -1039,6 +1058,7 @@ TfLiteStatus Subgraph::ModifyGraphWithDelegate(TfLiteDelegate* delegate) {
   // Setup additional context interface.
   SwitchToDelegateContext();
 
+  std::cout << "Before prepare" << std::endl;
   TfLiteStatus status = delegate->Prepare(context_, delegate);
 
   std::cout << "After prepare" << std::endl;
