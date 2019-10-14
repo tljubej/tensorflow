@@ -610,15 +610,18 @@ TfLiteStatus Subgraph::AddNodeWithParameters(
   node.temporaries = TfLiteIntArrayCreate(0);
   std::cout << ">>After TfLiteIntArrayCreate 1" << std::endl;
   if (init_data) {
+    std::cout << ">>Before OpInit" << std::endl;
     node.user_data = OpInit(*registration, init_data, init_data_size);
     std::cout << ">>After OpInit" << std::endl;
   } else {
+    std::cout << ">>Before OpInit 2" << std::endl;
     node.user_data =
         OpInit(*registration,
                reinterpret_cast<const char*>(builtin_data_deleter.get()), 0);
         std::cout << ">>After OpInit2" << std::endl;
   }
 
+  std::cout << ">>Before release" << std::endl;
   node.builtin_data = builtin_data_deleter.release();
   std::cout << ">>After release" << std::endl;
 
