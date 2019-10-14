@@ -1041,8 +1041,13 @@ TfLiteStatus Subgraph::ModifyGraphWithDelegate(TfLiteDelegate* delegate) {
 
   TfLiteStatus status = delegate->Prepare(context_, delegate);
 
+  std::cout << "After prepare" << std::endl;
+
   // Remove additional context info.
   SwitchToKernelContext();
+
+  std::cout << "After switch kernel context" << std::endl;
+
 
   TF_LITE_ENSURE_OK(context_, status);
 
@@ -1053,10 +1058,15 @@ TfLiteStatus Subgraph::ModifyGraphWithDelegate(TfLiteDelegate* delegate) {
     TF_LITE_ENSURE_OK(context_, memory_planner_->PlanAllocations());
   }
 
+  std::cout << "After planallocations" << std::endl;
+
+
   if (!(delegate->flags & kTfLiteDelegateFlagsAllowDynamicTensors)) {
     // Reset the state to force tensor/op reallocation.
     state_ = kStateUninvokable;
     TF_LITE_ENSURE_OK(context_, AllocateTensors());
+    std::cout << "After allocatetensors" << std::endl;
+
     TF_LITE_ENSURE_EQ(context_, state_, kStateInvokable);
     // After using a delegate which doesn't support dynamic tensors, make the
     // entire graph immutable.
@@ -1065,6 +1075,8 @@ TfLiteStatus Subgraph::ModifyGraphWithDelegate(TfLiteDelegate* delegate) {
     // If the graph was invokable prior to delegate application, flush
     // allocation now to leave it in a consistent state.
     TF_LITE_ENSURE_OK(context_, AllocateTensors());
+    std::cout << "After other allocatetensors" << std::endl;
+
     TF_LITE_ENSURE_EQ(context_, state_, kStateInvokable);
   }
 
