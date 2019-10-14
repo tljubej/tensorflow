@@ -327,12 +327,15 @@ TfLiteStatus Subgraph::ReplaceNodeSubsetsWithDelegateKernels(
       case NodeSubset::kTfNonPartition:
         for (auto it = node_subset.nodes.begin(); it != node_subset.nodes.end();
              ++it) {
+          std::cout << ">>before execution_plan_.push_back(*it)" << std::endl;
           execution_plan_.push_back(*it);
+          std::cout << ">>execution_plan_.push_back(*it)" << std::endl;
         }
         break;
       case NodeSubset::kTfPartition: {
         int node_index;
 
+        std::cout << ">>before CreateDelegateParams" << std::endl;
         TfLiteDelegateParams* params =
             CreateDelegateParams(delegate, node_subset);
         TF_LITE_ENSURE_STATUS(AddNodeWithParameters(
@@ -579,9 +582,12 @@ TfLiteStatus Subgraph::AddNodeWithParameters(
 
   TF_LITE_ENSURE_OK(context_, CheckTensorIndices("node inputs", inputs.data(),
                                                  inputs.size()));
+  std::cout << ">>After CheckTensorIndices 1" << std::endl;
+
   TF_LITE_ENSURE_OK(
       &context_,
       CheckTensorIndices("node outputs", outputs.data(), outputs.size()));
+  std::cout << ">>After CheckTensorIndices 2" << std::endl;
 
   int new_node_index = nodes_and_registration_.size();
   if (node_index) *node_index = new_node_index;
@@ -596,10 +602,16 @@ TfLiteStatus Subgraph::AddNodeWithParameters(
   // representation isn't std::vector, but in the future we would like to avoid
   // copies, so we want the interface to take r-value references now.
   node.inputs = ConvertVectorToTfLiteIntArray(inputs);
+  std::cout << ">>After ConvertVector 1" << std::endl;
   node.outputs = ConvertVectorToTfLiteIntArray(outputs);
+
+  std::cout << ">>After ConvertVector 2" << std::endl;
+
   node.temporaries = TfLiteIntArrayCreate(0);
+  std::cout << ">>After TfLiteIntArrayCreate 1" << std::endl;
   if (init_data) {
     node.user_data = OpInit(*registration, init_data, init_data_size);
+    std::cout << ">>After OpInit" << std::endl;
   } else {
     node.user_data =
         OpInit(*registration,
