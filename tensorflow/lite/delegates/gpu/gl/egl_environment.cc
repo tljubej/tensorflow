@@ -30,14 +30,18 @@ namespace {
 // and OpenGL ES is reinitialized. See eglMakeCurrent
 
 Status InitDisplay(EGLDisplay* egl_display) {
+  std::cout << "Before eglGetDisplay" << std::endl;
   RETURN_IF_ERROR(
       TFLITE_GPU_CALL_EGL(eglGetDisplay, egl_display, EGL_DEFAULT_DISPLAY));
+  std::cout << "After eglGetDisplay" << std::endl;
   if (*egl_display == EGL_NO_DISPLAY) {
     return UnavailableError("eglGetDisplay returned nullptr");
   }
   bool is_initialized;
+  std::cout << "Before eGlInitialize" << std::endl;
   RETURN_IF_ERROR(TFLITE_GPU_CALL_EGL(eglInitialize, &is_initialized,
                                       *egl_display, nullptr, nullptr));
+  std::cout << "After eGlInitialize" << std::endl;
   if (!is_initialized) {
     return InternalError("No EGL error, but eglInitialize failed");
   }
