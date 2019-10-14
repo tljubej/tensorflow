@@ -13,6 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
+#include <iostream>
+
 #include "tensorflow/lite/delegates/gpu/gl/egl_environment.h"
 
 #include "absl/memory/memory.h"
@@ -47,6 +49,7 @@ Status InitDisplay(EGLDisplay* egl_display) {
 Status EglEnvironment::NewEglEnvironment(
     std::unique_ptr<EglEnvironment>* egl_environment) {
   *egl_environment = absl::make_unique<EglEnvironment>();
+  std::cout << "Before NewEglEnvironment" << std::endl;
   RETURN_IF_ERROR((*egl_environment)->Init());
   return OkStatus();
 }
@@ -62,24 +65,30 @@ EglEnvironment::~EglEnvironment() {
 
 Status EglEnvironment::Init() {
   bool is_bound;
+  std::cout << "Before eglBindAPI" << std::endl;
   RETURN_IF_ERROR(
       TFLITE_GPU_CALL_EGL(eglBindAPI, &is_bound, EGL_OPENGL_ES_API));
   if (!is_bound) {
     return InternalError("No EGL error, but eglBindAPI failed");
   }
 
+  std::cout << "Before eglGetCurrentContext" << std::endl;
   // Re-use context and display if it was created on this thread.
   if (eglGetCurrentContext() != EGL_NO_CONTEXT) {
     display_ = eglGetCurrentDisplay();
     context_ = EglContext(eglGetCurrentContext(), display_, EGL_NO_CONFIG_KHR);
   } else {
+    std::cout << "Before InitDisplay" << std::endl;
     RETURN_IF_ERROR(InitDisplay(&display_));
 
+    std::cout << "Before InitConfiglessContext" << std::endl;
     Status status = InitConfiglessContext();
     if (!status.ok()) {
+      std::cout << "Before InitSurfacelessContext" << std::endl;
       status = InitSurfacelessContext();
     }
     if (!status.ok()) {
+      std::cout << "Before InitPBufferContext" << std::endl;
       status = InitPBufferContext();
     }
     if (!status.ok()) {
