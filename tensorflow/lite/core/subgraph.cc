@@ -315,6 +315,7 @@ TfLiteStatus Subgraph::ReplaceNodeSubsetsWithDelegateKernels(
 
   std::cout << "After execution plan clear" << std::endl;
 
+  std::cout << "node subsets" << node_subsets.size() << std::endl;
 
   for (auto& node_subset : node_subsets) {
     // Subsets claimed by the delegate should have a "macro" op created, the
@@ -363,6 +364,8 @@ TfLiteStatus Subgraph::ReplaceNodeSubsetsWithDelegateKernels(
         break;
     }
   }
+  std::cout << ">>End replace node" << std::endl;
+
   return kTfLiteOk;
 }
 
