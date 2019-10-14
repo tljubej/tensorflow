@@ -87,6 +87,7 @@ Status EglEnvironment::Init() {
 
     std::cout << "Before InitConfiglessContext" << std::endl;
     Status status = InitConfiglessContext();
+    std::cout << "After InitConfiglessContext" << std::endl;
     if (!status.ok()) {
       std::cout << "Before InitSurfacelessContext" << std::endl;
       status = InitSurfacelessContext();
@@ -114,8 +115,10 @@ Status EglEnvironment::InitConfiglessContext() {
 }
 
 Status EglEnvironment::InitSurfacelessContext() {
+  std::cout << "Before CreateSurfacelessContext" << std::endl;
   RETURN_IF_ERROR(
       CreateSurfacelessContext(display_, EGL_NO_CONTEXT, &context_));
+  std::cout << "Before MakeCurrentSurfaceless" << std::endl;
   Status status = context_.MakeCurrentSurfaceless();
   if (!status.ok()) {
     return status;
