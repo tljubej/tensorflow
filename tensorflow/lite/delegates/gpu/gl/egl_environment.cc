@@ -86,7 +86,7 @@ Status EglEnvironment::Init() {
     RETURN_IF_ERROR(InitDisplay(&display_));
 
     std::cout << "Before InitConfiglessContext" << std::endl;
-    Status status = InitConfiglessContext();
+    Status status = InitSurfacelessContext();
     std::cout << "After InitConfiglessContext" << std::endl;
     if (!status.ok()) {
       std::cout << "Before InitSurfacelessContext" << std::endl;
