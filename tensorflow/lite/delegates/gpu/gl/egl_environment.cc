@@ -30,18 +30,14 @@ namespace {
 // and OpenGL ES is reinitialized. See eglMakeCurrent
 
 Status InitDisplay(EGLDisplay* egl_display) {
-  std::cout << "Before eglGetDisplay" << std::endl;
   RETURN_IF_ERROR(
       TFLITE_GPU_CALL_EGL(eglGetDisplay, egl_display, EGL_DEFAULT_DISPLAY));
-  std::cout << "After eglGetDisplay" << std::endl;
   if (*egl_display == EGL_NO_DISPLAY) {
     return UnavailableError("eglGetDisplay returned nullptr");
   }
   bool is_initialized;
-  std::cout << "Before eGlInitialize" << std::endl;
   RETURN_IF_ERROR(TFLITE_GPU_CALL_EGL(eglInitialize, &is_initialized,
                                       *egl_display, nullptr, nullptr));
-  std::cout << "After eGlInitialize" << std::endl;
   if (!is_initialized) {
     return InternalError("No EGL error, but eglInitialize failed");
   }
@@ -53,7 +49,6 @@ Status InitDisplay(EGLDisplay* egl_display) {
 Status EglEnvironment::NewEglEnvironment(
     std::unique_ptr<EglEnvironment>* egl_environment) {
   *egl_environment = absl::make_unique<EglEnvironment>();
-  std::cout << "Before NewEglEnvironment" << std::endl;
   RETURN_IF_ERROR((*egl_environment)->Init());
   return OkStatus();
 }
@@ -69,31 +64,24 @@ EglEnvironment::~EglEnvironment() {
 
 Status EglEnvironment::Init() {
   bool is_bound;
-  std::cout << "Before eglBindAPI" << std::endl;
   RETURN_IF_ERROR(
       TFLITE_GPU_CALL_EGL(eglBindAPI, &is_bound, EGL_OPENGL_ES_API));
   if (!is_bound) {
     return InternalError("No EGL error, but eglBindAPI failed");
   }
 
-  std::cout << "Before eglGetCurrentContext" << std::endl;
   // Re-use context and display if it was created on this thread.
   if (eglGetCurrentContext() != EGL_NO_CONTEXT) {
     display_ = eglGetCurrentDisplay();
     context_ = EglContext(eglGetCurrentContext(), display_, EGL_NO_CONFIG_KHR);
   } else {
-    std::cout << "Before InitDisplay" << std::endl;
     RETURN_IF_ERROR(InitDisplay(&display_));
 
-    std::cout << "Before InitConfiglessContext" << std::endl;
     Status status = InitConfiglessContext();
-    std::cout << "After InitConfiglessContext" << std::endl;
     if (!status.ok()) {
-      std::cout << "Before InitSurfacelessContext" << std::endl;
       status = InitSurfacelessContext();
     }
     if (!status.ok()) {
-      std::cout << "Before InitPBufferContext" << std::endl;
       status = InitPBufferContext();
     }
     if (!status.ok()) {
@@ -115,10 +103,8 @@ Status EglEnvironment::InitConfiglessContext() {
 }
 
 Status EglEnvironment::InitSurfacelessContext() {
-  std::cout << "Before CreateSurfacelessContext" << std::endl;
   RETURN_IF_ERROR(
       CreateSurfacelessContext(display_, EGL_NO_CONTEXT, &context_));
-  std::cout << "Before MakeCurrentSurfaceless" << std::endl;
   Status status = context_.MakeCurrentSurfaceless();
   if (!status.ok()) {
     return status;
