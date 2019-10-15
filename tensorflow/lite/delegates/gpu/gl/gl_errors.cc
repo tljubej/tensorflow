@@ -61,21 +61,21 @@ struct ErrorFormatter {
 
 Status GetOpenGlErrors() {
   std::cout << "Before glGetError 1" << std::endl;
-  auto error = glGetError();
+  auto error = eglGetError();
   if (error == GL_NO_ERROR) {
     return OkStatus();
   }
   std::cout << "error 1: " << error << std::endl;
 
   std::cout << "Before glGetError 2" << std::endl;
-  auto error2 = glGetError();
+  auto error2 = eglGetError();
   std::cout << "error 2: " << error2 << std::endl;
   if (error2 == GL_NO_ERROR) {
     return InternalError(ErrorToString(error));
   }
   std::vector<GLenum> errors = {error, error2};
   std::cout << "Before glGetError 3" << std::endl;
-  for (error = glGetError(); error != GL_NO_ERROR; error = glGetError()) {
+  for (error = eglGetError(); error != GL_NO_ERROR; error = eglGetError()) {
   std::cout << "error3: " << error << std::endl;
     errors.push_back(error);
   }

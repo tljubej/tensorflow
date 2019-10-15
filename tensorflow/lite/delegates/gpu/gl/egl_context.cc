@@ -48,11 +48,11 @@ Status CreateContext(EGLDisplay display, EGLContext shared_context,
   std::cout << "Before eglCreateContext 2" << std::endl;
   EGLContext context =
       eglCreateContext(display, config, shared_context, attributes);
-  if (context == EGL_NO_CONTEXT) {
-    return InternalError("eglCreateContext failed.");
-  }
   std::cout << "Before GetOpenGlErrors" << std::endl;
   RETURN_IF_ERROR(GetOpenGlErrors());
+  if (context == EGL_NO_CONTEXT) {
+    return InternalError("No EGL error, but eglCreateContext failed.");
+  }
   std::cout << "Before EglContext()" << std::endl;
   *egl_context = EglContext(context, display, config);
   return OkStatus();
