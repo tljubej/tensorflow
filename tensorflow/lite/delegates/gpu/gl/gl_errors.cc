@@ -75,7 +75,7 @@ Status GetOpenGlErrors() {
   }
   std::vector<GLenum> errors = {error, error2};
   std::cout << "Before glGetError 3" << std::endl;
-  for (error = eglGetError(); error != GL_NO_ERROR; error = eglGetError()) {
+  for (error = eglGetError(); error != EGL_SUCCESS; error = eglGetError()) {
   std::cout << "error3: " << error << std::endl;
     errors.push_back(error);
   }
