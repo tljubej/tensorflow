@@ -171,20 +171,16 @@ double process_mem_usage()
     // Extract TFLite delegate execution plan from the context and convert it
     // into FlowGraph32.
     GraphFloat32 graph;
-    std::cout << "Before BuildModel" << std::endl;
     RETURN_IF_ERROR(BuildModel(context, delegate_params, &graph));
 
     // Apply general transformations on the graph.
     NullTransformationReporter reporter;
     ModelTransformer transformer(&graph, &reporter);
-    std::cout << "Before ApplyGeneralTransformations" << std::endl;
     if (!ApplyGeneralTransformations(&transformer)) {
       return InternalError("Graph general transformations failed");
     }
 
-    std::cout << "Before NewEglEnvironment" << std::endl;
     if (!env_) RETURN_IF_ERROR(EglEnvironment::NewEglEnvironment(&env_));
-    std::cout << "After NewEglEnvironment" << std::endl;
 
     // TODO(impjdi): Remove code duplication.
     auto values = graph.values();
@@ -447,14 +443,10 @@ TfLiteStatus DelegatePrepare(TfLiteContext* context, TfLiteDelegate* delegate) {
       [](TfLiteContext* context, const char* buffer, size_t) -> void* {
         const auto* params =
             reinterpret_cast<const TfLiteDelegateParams*>(buffer);
-        std::cout << "Before GetGpuDelgate" << std::endl;
         auto* gpu_delegate = GetGpuDelegate(params->delegate);
-        std::cout << "After GetGpuDelgate" << std::endl;
         // Everything below should happen in prepare function call, but TFLite
         // for whatever reason forbids that.
-        std::cout << "Before delegate Prepare" << std::endl;
         const auto status = gpu_delegate->Prepare(context, params);
-        std::cout << "After delegate Prepare" << std::endl;
         if (status.ok()) return gpu_delegate;
         context->ReportError(context, "TfLiteGpuDelegate Prepare: %s",
                              status.error_message().c_str());

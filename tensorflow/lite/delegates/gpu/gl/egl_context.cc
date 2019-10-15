@@ -45,21 +45,17 @@ Status CreateContext(EGLDisplay display, EGLContext shared_context,
                                       EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR,
 #endif
                                       EGL_NONE};
-  std::cout << "Before eglCreateContext 2" << std::endl;
   EGLContext context =
       eglCreateContext(display, config, shared_context, attributes);
-  std::cout << "Before GetOpenGlErrors" << std::endl;
   RETURN_IF_ERROR(GetOpenGlErrors());
   if (context == EGL_NO_CONTEXT) {
     return InternalError("No EGL error, but eglCreateContext failed.");
   }
-  std::cout << "Before EglContext()" << std::endl;
   *egl_context = EglContext(context, display, config);
   return OkStatus();
 }
 
 bool HasExtension(EGLDisplay display, const char* name) {
-  std::cout << "Before eglQueryString" << std::endl;
   return strstr(eglQueryString(display, EGL_EXTENSIONS), name);
 }
 
@@ -105,11 +101,9 @@ bool EglContext::IsCurrent() const {
 
 Status CreateConfiglessContext(EGLDisplay display, EGLContext shared_context,
                                EglContext* egl_context) {
-  std::cout << "Before HasExtension" << std::endl;
   if (!HasExtension(display, "EGL_KHR_no_config_context")) {
     return UnavailableError("EGL_KHR_no_config_context not supported");
   }
-  std::cout << "Before CreateContext" << std::endl;
   return CreateContext(display, shared_context, EGL_NO_CONFIG_KHR, egl_context);
 }
 
