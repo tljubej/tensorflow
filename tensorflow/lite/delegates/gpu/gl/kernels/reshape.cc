@@ -46,6 +46,7 @@ class Reshape : public NodeShader {
         output->tensor.shape.DimensionsProduct()) {
       return InvalidArgumentError("Dimensions product is reshape don't match");
     }
+    attr.new_shape.b = output->tensor.shape.b;
     if (attr.new_shape != output->tensor.shape) {
       return InvalidArgumentError(
           "Dimensions for output does not match new_shape attribute");
