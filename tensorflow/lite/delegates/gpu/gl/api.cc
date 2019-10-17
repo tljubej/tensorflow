@@ -291,6 +291,8 @@ class CompiledModelImpl
     size_t shader_idx;
     RETURN_IF_ERROR(AddFullShader(partial_shaders_[partial_shader_index],
                                   workgroup_size, &shader_idx));
+
+    std::cout << "workgroups size: " << workgroup_size.x << " " << workgroup_size.y << " " << workgroup_size.z << std::endl;
     programs_.push_back({
         parameters,
         objects,
@@ -373,16 +375,8 @@ class CompiledModelImpl
 // @return true if all tensors have same batch value.
 bool IsBatchMatchesForAllValues(const GraphFloat32& model) {
   const int32_t b = model.values()[0]->tensor.shape.b;
-  std::cout << "b: " << b << std::endl;
-  for (auto value : model.inputs()) {
-    std::cout << "input: " << value->tensor.shape.b << std::endl;
-  }
-  for (auto value : model.outputs()) {
-    std::cout << "output: " << value->tensor.shape.b << std::endl;
-  }
 
   for (auto value : model.values()) {
-    std::cout << "value: " << value->tensor.shape.b << std::endl;
     if (value->tensor.shape.b != b) {
       return false;
     }
