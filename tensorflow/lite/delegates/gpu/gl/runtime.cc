@@ -198,8 +198,6 @@ Status Runtime::AddProgram(const GlShader& shader,
     RETURN_IF_ERROR(program.SetParameter(parameter));
   }
 
-  std::cout << "workgroups size: " << num_workgroups.x << " " << num_workgroups.y << " " << num_workgroups.z << std::endl;
-
 
   programs_.emplace_back(
       CompiledProgramDescriptor{std::move(program), num_workgroups, {}});

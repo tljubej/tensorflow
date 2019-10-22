@@ -157,7 +157,6 @@ double process_mem_usage()
       attr.node_indices.push_back(node->id);
       RETURN_IF_ERROR(node_shader_.GenerateCode(
           {&compiled_graph_, &gpu_info_, node, options_}, &attr.code));
-      std::cout << "Memory usage after GenerateCode: " << process_mem_usage() << " id: " << node->id << " operation: " <<
         node->operation.type << std::endl;
       
       node->operation.attributes = std::move(attr);
@@ -189,7 +188,6 @@ double process_mem_usage()
     std::unordered_map<ValueId, Object> objects;
     for (auto value : compiled_graph_.values()) {
       Object object = MakePHWC4Ref(value->id, value->tensor.shape);
-      std::cout << "Memory usage after GenerateCode: " << process_mem_usage() << " id: " << value->id << " tensor type: " <<
         (int)value->tensor.type << std::endl;
       object.data_type = value->tensor.type;
       // External references may not be upgraded to f16 nor be represented as
@@ -312,7 +310,6 @@ double process_mem_usage()
       // Generate source code.
       ShaderCode shader_code;
       RETURN_IF_ERROR(codegen.Build(std::move(attr), &shader_code));
-      std::cout << "Memory usage after shader Build: " << process_mem_usage() << std::endl;
       RETURN_IF_ERROR(callback(std::move(shader_code)));
     }
     return OkStatus();

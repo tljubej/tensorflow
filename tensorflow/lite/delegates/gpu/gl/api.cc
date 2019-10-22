@@ -292,7 +292,6 @@ class CompiledModelImpl
     RETURN_IF_ERROR(AddFullShader(partial_shaders_[partial_shader_index],
                                   workgroup_size, &shader_idx));
 
-    std::cout << "workgroups size: " << workgroup_size.x << " " << workgroup_size.y << " " << workgroup_size.z << std::endl;
     programs_.push_back({
         parameters,
         objects,
