@@ -157,7 +157,6 @@ double process_mem_usage()
       attr.node_indices.push_back(node->id);
       RETURN_IF_ERROR(node_shader_.GenerateCode(
           {&compiled_graph_, &gpu_info_, node, options_}, &attr.code));
-        node->operation.type << std::endl;
       
       node->operation.attributes = std::move(attr);
     }
