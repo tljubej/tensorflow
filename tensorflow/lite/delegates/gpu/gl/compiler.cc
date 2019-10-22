@@ -187,7 +187,6 @@ double process_mem_usage()
     std::unordered_map<ValueId, Object> objects;
     for (auto value : compiled_graph_.values()) {
       Object object = MakePHWC4Ref(value->id, value->tensor.shape);
-        (int)value->tensor.type << std::endl;
       object.data_type = value->tensor.type;
       // External references may not be upgraded to f16 nor be represented as
       // textures.
