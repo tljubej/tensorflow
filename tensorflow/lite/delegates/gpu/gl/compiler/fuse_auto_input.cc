@@ -17,6 +17,7 @@ limitations under the License.
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "absl/strings/str_cat.h"
 #include "absl/strings/str_replace.h"
@@ -102,6 +103,7 @@ TransformResult FuseAutoInput::ApplyToNode(Node* node, GraphFloat32* graph) {
   // Break connections between current node and its inputs.
   for (auto value : graph->FindInputs(node->id)) {
     if (!graph->RemoveConsumer(node->id, value->id).ok()) {
+      std::cout << "!!!Cannot remove consumer!!! " << node->operation.type << std::endl;
       return {TransformStatus::INVALID, ""};
     }
   }
@@ -176,6 +178,7 @@ TransformResult FuseAutoInput::ApplyToNode(Node* node, GraphFloat32* graph) {
       }
 
       if (!graph->AddConsumer(node->id, super_inputs[i]->id).ok()) {
+        std::cout << "!!!Cannot add consumer!!! " << node->operation.type << std::endl;
         return {TransformStatus::INVALID, ""};
       }
       input_num++;
@@ -190,6 +193,7 @@ TransformResult FuseAutoInput::ApplyToNode(Node* node, GraphFloat32* graph) {
 
     // Merge all objects, parameters and source code.
     if (!MergeCode(&attr, &node_attr).ok()) {
+      std::cout << "!!!Cannot merge code!!! " << node->operation.type << std::endl;
       return {TransformStatus::INVALID, "Unable to merge the code"};
     }
     absl::StrAppend(&node_attr.code.source_code, "{\n", attr.code.source_code,
@@ -201,6 +205,7 @@ TransformResult FuseAutoInput::ApplyToNode(Node* node, GraphFloat32* graph) {
     operation_type += input->operation.type;
 
     if (!graph->DeleteNode(input->id).ok()) {
+      std::cout << "!!!Cannot delete node!!! " << node->operation.type << std::endl;
       return {TransformStatus::INVALID, ""};
     }
   }
@@ -213,6 +218,7 @@ TransformResult FuseAutoInput::ApplyToNode(Node* node, GraphFloat32* graph) {
                       "[gid.x, gid.y, gid.z]$;\n");
     }
     if (!graph->AddConsumer(node->id, input_values[i].first).ok()) {
+      std::cout << "!!!Cannot add consumer!!! " << node->operation.type << std::endl;
       return {TransformStatus::INVALID, ""};
     }
     input_num++;
