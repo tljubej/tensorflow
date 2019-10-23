@@ -139,14 +139,14 @@ void tryComputeShader(size_t compute_size, size_t workgroup_size)
     glUseProgram(computeProgram);
 
     auto timer = std::chrono::system_clock::now();
-    glDispatchCompute(arraySize / 64,1,1);   // arraySize/local_size_x
+    glDispatchCompute(arraySize / workgroup_size,1,1);   // arraySize/local_size_x
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
-    auto timer_end = std::chrono::system_clock::now();
     CHECK();
 
 
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, outputSSbo);
     float* pOut = (float*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, arraySize * sizeof(float), GL_MAP_READ_BIT);
+    auto timer_end = std::chrono::system_clock::now();
     auto elapsed = timer_end - timer;
     std::cout << std::endl << "Elapsed ms: " << std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count() / 1000.0 << std::endl;
     for (GLuint i = 0; i < arraySize; ++i)
