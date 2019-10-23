@@ -11,6 +11,7 @@
 
 static const char gComputeShader[] = 
     "#version 320 es\n"
+    "layout(local_size_x = 64) in;\n"
     "layout(binding = 0) readonly buffer Input0 {\n"
     "    float data[];\n"
     "} input0;\n"
@@ -128,7 +129,7 @@ void tryComputeShader(size_t compute_size, size_t workgroup_size)
     glUseProgram(computeProgram);
 
     auto timer = std::chrono::system_clock::now();
-    glDispatchCompute(workgroup_size,1,1);   // arraySize/local_size_x
+    glDispatchCompute(arraySize / 64,1,1);   // arraySize/local_size_x
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
     auto timer_end = std::chrono::system_clock::now();
     auto elapsed = timer_end - timer;
