@@ -153,7 +153,7 @@ void tryComputeShader(size_t compute_size, size_t workgroup_size)
     {
         if (fabs(pOut[i] - (f0[i]*2.0)) > 0.0001)
         {
-            printf("verification FAILED at array index %d, actual: %f, expected: %f\n", i, pOut[i], f0[i]+f1[i]);
+            printf("verification FAILED at array index %d, actual: %f, expected: %f\n", i, pOut[i], f0[i]*2.0);
             glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
             return;
         }
