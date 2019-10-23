@@ -11,7 +11,6 @@
 
 static const char gComputeShader[] = 
     "#version 320 es\n"
-    "layout(local_size_x = 8) in;\n"
     "layout(binding = 0) readonly buffer Input0 {\n"
     "    float data[];\n"
     "} input0;\n"
@@ -133,8 +132,10 @@ void tryComputeShader(size_t compute_size, size_t workgroup_size)
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
     auto timer_end = std::chrono::system_clock::now();
     auto elapsed = timer_end - timer;
-    std::cout << "Elapsed ms: " << std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count() << std::endl;
+    std::cout << std::endl << "Elapsed ms: " << std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count() / 1000.0 << std::endl;
     CHECK();
+
+    delete[] f0, f1;
 
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, outputSSbo);
     float* pOut = (float*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, arraySize * sizeof(float), GL_MAP_READ_BIT);
