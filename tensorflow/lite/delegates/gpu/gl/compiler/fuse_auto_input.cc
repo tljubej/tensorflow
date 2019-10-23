@@ -178,7 +178,7 @@ TransformResult FuseAutoInput::ApplyToNode(Node* node, GraphFloat32* graph) {
       }
 
       if (!graph->AddConsumer(node->id, super_inputs[i]->id).ok()) {
-        std::cout << "!!!Cannot add consumer!!! " << node->operation.type << std::endl;
+        std::cout << "!!!Cannot add consumer 1!!! " << node->operation.type << std::endl;
         return {TransformStatus::INVALID, ""};
       }
       input_num++;
@@ -218,7 +218,7 @@ TransformResult FuseAutoInput::ApplyToNode(Node* node, GraphFloat32* graph) {
                       "[gid.x, gid.y, gid.z]$;\n");
     }
     if (!graph->AddConsumer(node->id, input_values[i].first).ok()) {
-      std::cout << "!!!Cannot add consumer!!! " << node->operation.type << std::endl;
+      std::cout << "!!!Cannot add consumer 2!!! " << node->operation.type << std::endl;
       return {TransformStatus::INVALID, ""};
     }
     input_num++;
