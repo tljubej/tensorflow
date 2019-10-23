@@ -7,7 +7,7 @@
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <GLES3/gl3.h>
-#include <GLES3/gl32.h>
+#include <GLES3/gl31.h>
 
 static const char gComputeShader[] = 
     "#version 320 es\n"
@@ -133,7 +133,7 @@ void tryComputeShader(size_t compute_size, size_t workgroup_size)
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
     auto timer_end = std::chrono::system_clock::now();
     auto elapsed = timer_end - timer;
-    std::cout << "Elapsed ms: " << std::chrono::duration_cast<std::chrono::milliseconds>(elapsed) << std::endl;
+    std::cout << "Elapsed ms: " << std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count() << std::endl;
     CHECK();
 
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, outputSSbo);

@@ -272,7 +272,7 @@ all: gl_bench flatc_gen $(LIB_PATH)  $(MINIMAL_BINARY) $(BENCHMARK_BINARY)
 micro: $(LIB_PATH)
 
 gl_bench:
-	$(CC) $(CXXFLAGS) -o $@ tensorflow/gl_cs_bench.cc
+	$(CC) $(CXXFLAGS) $(INCLUDES) -lGLESv2_adreno -lEGL_adreno  -o $@ tensorflow/gl_cs_bench.cc
 
 # Hack for generating schema file bypassing flatbuffer parsing
 tensorflow/lite/schema/schema_generated.h:
