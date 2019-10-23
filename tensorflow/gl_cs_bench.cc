@@ -99,7 +99,7 @@ void setupSSBufferObject(GLuint& ssbo, GLuint index, float* pIn, GLuint count)
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, index, ssbo);
 }
 
-void tryComputeShader(size_t compute_size, size_t workgroup_size)
+void tryComputeShader(size_t compute_size, size_t workgroup_size, size_t for_loop)
 {
     GLuint computeProgram;
     GLuint input0SSbo;
@@ -119,7 +119,9 @@ void tryComputeShader(size_t compute_size, size_t workgroup_size)
     "void main()\n"
     "{\n"
     "    uint idx = gl_GlobalInvocationID.x;\n"
-    "    output0.data[idx] = input0.data[idx] * 2.0f;\n"
+    "    for (int i = 0; i < " + std::to_string(for_loop) + "; i++) {\n"
+    "        output0.data[idx] = input0.data[idx] * 2.0f + float(i) / 10.0f;\n"
+    "    }\n"
     "}\n";
 
     CHECK();
@@ -203,7 +205,7 @@ int main(int /*argc*/, char** argv)
         return 0;
     }
 
-    tryComputeShader(strtol(argv[1], nullptr, 10), strtol(argv[2], nullptr, 10));
+    tryComputeShader(strtol(argv[1], nullptr, 10), strtol(argv[2], nullptr, 10), strtol(argv[3], nullptr, 10));
 
     eglDestroyContext(dpy, context);
     eglTerminate(dpy);
