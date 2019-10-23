@@ -3,6 +3,7 @@
 #include <math.h>
 #include <chrono>
 #include <iostream>
+#include <string>
 
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
@@ -11,21 +12,17 @@
 
 static const char gComputeShader[] = 
     "#version 320 es\n"
-    "layout(local_size_x = 64) in;\n"
+    "layout(local_size_x = XXYXX) in;\n"
     "layout(binding = 0) readonly buffer Input0 {\n"
     "    float data[];\n"
     "} input0;\n"
-    "layout(binding = 1) readonly buffer Input1 {\n"
-    "    float data[];\n"
-    "} input1;\n"
-    "layout(binding = 2) writeonly buffer Output {\n"
+    "layout(binding = 1) writeonly buffer Output {\n"
     "    float data[];\n"
     "} output0;\n"
     "void main()\n"
     "{\n"
     "    uint idx = gl_GlobalInvocationID.x;\n"
-    "    float f = input0.data[idx] + input1.data[idx];"
-    "    output0.data[idx] = f;\n"
+    "    output0.data[idx] = input0.data[idx] * 2.0f;\n"
     "}\n";
 
 #define CHECK() \
@@ -109,21 +106,34 @@ void tryComputeShader(size_t compute_size, size_t workgroup_size)
     GLuint input1SSbo;
     GLuint outputSSbo;
 
+
+    std::string gComputeShader = 
+    "#version 320 es\n"
+    "layout(local_size_x =" + std::to_string(workgroup_size) + ") in;\n"
+    "layout(binding = 0) readonly buffer Input0 {\n"
+    "    float data[];\n"
+    "} input0;\n"
+    "layout(binding = 1) writeonly buffer Output {\n"
+    "    float data[];\n"
+    "} output0;\n"
+    "void main()\n"
+    "{\n"
+    "    uint idx = gl_GlobalInvocationID.x;\n"
+    "    output0.data[idx] = input0.data[idx] * 2.0f;\n"
+    "}\n";
+
     CHECK();
-    computeProgram = createComputeProgram(gComputeShader);
+    computeProgram = createComputeProgram(gComputeShader.c_str());
     CHECK();
 
     const GLuint arraySize = compute_size;
     float* f0 = new float[arraySize];
-    float* f1 = new float[arraySize];
     for (GLuint i = 0; i < arraySize; ++i)
     {
         f0[i] = i;
-        f1[i] = i;
     }
     setupSSBufferObject(input0SSbo, 0, f0, arraySize);
-    setupSSBufferObject(input1SSbo, 1, f1, arraySize);
-    setupSSBufferObject(outputSSbo, 2, NULL, arraySize);
+    setupSSBufferObject(outputSSbo, 1, NULL, arraySize);
     CHECK();
 
     glUseProgram(computeProgram);
@@ -136,19 +146,20 @@ void tryComputeShader(size_t compute_size, size_t workgroup_size)
     std::cout << std::endl << "Elapsed ms: " << std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count() / 1000.0 << std::endl;
     CHECK();
 
-    delete[] f0, f1;
 
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, outputSSbo);
     float* pOut = (float*)glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, arraySize * sizeof(float), GL_MAP_READ_BIT);
     for (GLuint i = 0; i < arraySize; ++i)
     {
-        if (fabs(pOut[i] - (f0[i]+f1[i])) > 0.0001)
+        if (fabs(pOut[i] - (f0[i]*2.0)) > 0.0001)
         {
             printf("verification FAILED at array index %d, actual: %f, expected: %f\n", i, pOut[i], f0[i]+f1[i]);
             glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
             return;
         }
     }
+
+    delete[] f0;
     glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
     printf("verification PASSED\n");
     glDeleteProgram(computeProgram);
