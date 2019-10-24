@@ -109,6 +109,7 @@ void tryComputeShader(size_t compute_size, size_t workgroup_size)
 
     std::string gComputeShader = 
     "#version 320 es\n"
+    "#pragma optimize (off)"
     "layout(local_size_x =" + std::to_string(workgroup_size) + ") in;\n"
     "layout(binding = 0) readonly buffer Input0 {\n"
     "    float data[];\n"
