@@ -119,9 +119,13 @@ void tryComputeShader(size_t compute_size, size_t workgroup_size)
     "void main()\n"
     "{\n"
     "    uint idx = gl_GlobalInvocationID.x;\n"
-    "    for (float i = 0.0f; i < 50.0f; i+=0.25f) {\n"
-    "        output0.data[idx] = i;\n"
-    "    }\n"
+    "    float f = 0.5f;\n"
+    "    f += input0.data[idx];\n"
+    "    f += input0.data[idx];\n"
+    "    f += input0.data[idx];\n"
+    "    f += input0.data[idx];\n"
+    "    f += input0.data[idx];\n"
+    "    output0.data[idx] = f;\n"
     "}\n";
 
     CHECK();
