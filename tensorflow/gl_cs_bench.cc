@@ -125,6 +125,11 @@ void tryComputeShader(size_t compute_size, size_t workgroup_size)
     "    f += input0.data[idx];\n"
     "    f += input0.data[idx];\n"
     "    f += input0.data[idx];\n"
+    "    f += input0.data[idx];\n"
+    "    f += input0.data[idx];\n"
+    "    f += input0.data[idx];\n"
+    "    f += input0.data[idx];\n"
+    "    f += input0.data[idx];\n"
     "    output0.data[idx] = f;\n"
     "}\n";
 
